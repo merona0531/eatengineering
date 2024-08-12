@@ -15,17 +15,23 @@ import {
     Group,
     BodyContainer,
     CloseBtn,
-    DeleteBtn, Username, DottedLine, BodyContainer2, RightArrow, GroupInfo
+    DeleteBtn,
+    Username,
+    DottedLine,
+    BodyContainer2,
+    RightArrow,
+    GroupInfo
 } from '../styles/mainstyle';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import GroupModal from '../components/GroupModal';
-import {TiChevronRightOutline } from 'react-icons/ti';
+import { TiChevronRightOutline } from 'react-icons/ti';
 import { IoClose } from "react-icons/io5";
 
 export default function HomePage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [groups, setGroups] = useState([]);
+    const [userName, setUserName] = useState(''); // 사용자 이름 상태 추가
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
 
@@ -38,7 +44,9 @@ export default function HomePage() {
                 });
 
                 if (res.ok) {
+                    const userData = await res.json();
                     setIsAuthenticated(true);
+                    setUserName(userData.user?.username || ''); // 사용자 이름 상태 업데이트
                     fetchGroups(); // 그룹명 불러오기
                 } else {
                     setIsAuthenticated(false);
@@ -51,9 +59,17 @@ export default function HomePage() {
 
         const fetchGroups = async () => {
             try {
-                const res = await fetch('/api/groups');
-                const data = await res.json();
-                setGroups(data);
+                const res = await fetch('/api/groups', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setGroups(data);
+                } else {
+                    console.error('Failed to fetch groups');
+                }
             } catch (error) {
                 console.error('Error fetching groups:', error);
             }
@@ -71,6 +87,8 @@ export default function HomePage() {
 
             if (res.ok) {
                 setIsAuthenticated(false);
+                setUserName(''); // 로그아웃 시 사용자 이름 초기화
+                router.push('/login');
             } else {
                 console.error('Logout failed');
             }
@@ -102,7 +120,8 @@ export default function HomePage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: groupName, user_id }),
+                body: JSON.stringify({ name: groupName }),
+                credentials: 'include', // 쿠키를 포함시킵니다
             });
 
             if (res.ok) {
@@ -124,6 +143,7 @@ export default function HomePage() {
             try {
                 const res = await fetch(`/api/groups/${groupId}`, {
                     method: 'DELETE',
+                    credentials: 'include',
                 });
 
                 if (res.ok) {
@@ -137,7 +157,6 @@ export default function HomePage() {
         }
     };
 
-
     return (
         <>
             <Reset />
@@ -145,7 +164,7 @@ export default function HomePage() {
                 <BtnWrapper>
                     {isAuthenticated ? (
                         <>
-                            <Username></Username>
+                            <Username>{userName} 님</Username> {/* 사용자 이름 표시 */}
                             <LogoutBtn onClick={handleLogout}>로그아웃</LogoutBtn>
                         </>
                     ) : (
@@ -179,7 +198,7 @@ export default function HomePage() {
                                         <path d="M37.5 15.625V59.375M15.625 37.5H59.375" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </PlusGroupContainer>
-                                {groups.map((group) => (
+                                {Array.isArray(groups) && groups.map((group) => (
                                     <Group key={group.id}>
                                         <DeleteBtn onClick={() => handleDeleteGroup(group.id)}>
                                             <IoClose />

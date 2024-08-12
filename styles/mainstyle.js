@@ -118,6 +118,8 @@ export const LogoutBtn=styled.div`
   }
 `
 export const Username=styled.div`
+        font-size: 25px;
+        color: black;
   
 `
 export const BodyContainer=styled.div`
