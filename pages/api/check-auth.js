@@ -3,7 +3,7 @@ import { open } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
 // JWT 비밀 키
-const JWT_SECRET = 'jwt 비밀키';
+const JWT_SECRET = '26fd3f027c9d9fe3dfcebab38afa893141a51a9f5e0bb46f36058f35fff32eab45da434b95c1ab7afb1d66045ecd7657f9639d24967f349715b9011878f306c3';
 
 export default async function handler(req, res) {
     if (req.method === 'GET') {

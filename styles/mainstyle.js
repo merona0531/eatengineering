@@ -182,7 +182,6 @@ export const RightArrow=styled.button`
         justify-content: center;
         top: 50%;
         left: 0;
-        z-index: 2;
         cursor: pointer;
         user-select: none;
         background: unset;
