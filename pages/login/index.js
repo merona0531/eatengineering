@@ -78,7 +78,7 @@ export default function Index() {
                         <Button type="submit">로그인</Button>
                     </form>
                 </LoginBox>
-                <SignUpBtn>회원가입</SignUpBtn>
+                <SignUpBtn onClick={() => router.push('/signup')}>회원가입</SignUpBtn>
             </Container>
         </Wrapper>
     );

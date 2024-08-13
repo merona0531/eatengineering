@@ -1,26 +1,9 @@
 import { Reset } from 'styled-reset';
-import {
-    Container,
-    SubTitle,
-    Logo,
-    TopBar,
-    Wrapper,
-    BtnWrapper,
-    LoginBtn,
-    RegisterBtn,
-    VirticalLineWrapper,
-    VirticalLine,
-    LogoutBtn,
-    PlusGroupContainer,
-    Group,
-    BodyContainer,
-    CloseBtn,
-    DeleteBtn,
-    Username,
-    DottedLine,
-    BodyContainer2,
-    RightArrow,
-    GroupInfo
+import {Container, SubTitle, Logo, TopBar,
+    Wrapper, BtnWrapper, LoginBtn, RegisterBtn, VirticalLineWrapper,
+    VirticalLine, LogoutBtn, PlusGroupContainer, Group,
+    BodyContainer, DeleteBtn, Username, DottedLine,
+    BodyContainer2, RightArrow, GroupInfo
 } from '../styles/mainstyle';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -46,7 +29,7 @@ export default function HomePage() {
                 if (res.ok) {
                     const userData = await res.json();
                     setIsAuthenticated(true);
-                    setUserName(userData.user?.username || ''); // 사용자 이름 상태 업데이트
+                    setUserName(userData.user?.name || ''); // 사용자 이름 상태 업데이트
                     fetchGroups(); // 그룹명 불러오기
                 } else {
                     setIsAuthenticated(false);
@@ -157,6 +140,10 @@ export default function HomePage() {
         }
     };
 
+    const handleGroupClick = (groupId) => {
+        router.push(`/groups/${groupId}`);
+    };
+
     return (
         <>
             <Reset />
@@ -195,12 +182,15 @@ export default function HomePage() {
                             <BodyContainer>
                                 <PlusGroupContainer onClick={() => setIsModalOpen(true)}>
                                     <svg width="150" height="150" viewBox="0 0 75 75" fill="#FFBD43" xmlns="http://www.w3.org/2000/svg" >
-                                        <path d="M37.5 15.625V59.375M15.625 37.5H59.375" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M37.5 15.625V59.375M15.625 37.5H59.375" stroke="white" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
                                     </svg>
                                 </PlusGroupContainer>
                                 {Array.isArray(groups) && groups.map((group) => (
-                                    <Group key={group.id}>
-                                        <DeleteBtn onClick={() => handleDeleteGroup(group.id)}>
+                                    <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
+                                        <DeleteBtn onClick={(e) => {
+                                            e.stopPropagation(); // Prevent triggering the group click event
+                                            handleDeleteGroup(group.id);
+                                        }}>
                                             <IoClose />
                                         </DeleteBtn>
                                         <GroupInfo>

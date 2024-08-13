@@ -27,6 +27,19 @@ async function initializeDb() {
     )
   `);
 
+    await db.exec(`
+    CREATE TABLE blogs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL,
+      user_id INTEGER NOT NULL,
+      group_id INTEGER NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id),
+      FOREIGN KEY (group_id) REFERENCES groups(id)
+    )
+  `);
+
     console.log('Database initialized and tables created.');
 }
 

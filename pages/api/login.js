@@ -25,7 +25,7 @@ export default async function handler(req, res) {
         }
 
         // 로그인 성공 시 JWT 생성
-        const token = jwt.sign({ id: user.id, username: user.username }, 'jwt 비밀키', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, username: user.username }, '26fd3f027c9d9fe3dfcebab38afa893141a51a9f5e0bb46f36058f35fff32eab45da434b95c1ab7afb1d66045ecd7657f9639d24967f349715b9011878f306c3', { expiresIn: '1h' });
 
         // JWT 토큰을 쿠키에 저장
         res.setHeader('Set-Cookie', serialize('token', token, {
