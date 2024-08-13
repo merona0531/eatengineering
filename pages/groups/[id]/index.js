@@ -78,7 +78,6 @@ export default function GroupDetailPage() {
 
     useEffect(() => {
         if (id) {
-            // 그룹 정보와 블로그 목록을 가져오는 함수
             const fetchGroupData = async () => {
                 try {
                     const res = await fetch(`/api/groups/${id}`, {
@@ -104,11 +103,12 @@ export default function GroupDetailPage() {
 
     // 글쓰기 버튼 클릭 시 블로그 작성 화면으로 이동
     const handleWriteBlog = () => {
-        router.push(`/groups/${id}/write`);  // '/groups/[id]/write' 경로로 이동
+        router.push(`/groups/${id}/write`);
     };
 
+    // 블로그 박스를 클릭할 때 블로그 상세 페이지로 이동
     const handleBlogClick = (blogId) => {
-        router.push(`/blogs/${blogId}`);  // '/blogs/[id]' 경로로 이동
+        router.push(`/blogs/${blogId}?groupId=${id}`);
     };
 
     return (

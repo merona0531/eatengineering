@@ -9,29 +9,48 @@ const Wrapper = styled.div`
   background-color: #fff9df;
   height: 100vh;
 `;
+
 const Container = styled.div`
   width: 95%;
   display: flex;
   flex-direction: column;
 `;
+
 const BlogTitle = styled.h1`
   font-size: 36px;
   color: #FFBD43;
+  margin-top: 20px;
 `;
+
 const BlogContent = styled.div`
   margin-top: 20px;
   font-size: 20px;
   line-height: 1.6;
 `;
 
+const DeleteButton = styled.button`
+  width: 100px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #FF4B4B;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #FF2C2C;
+  }
+`;
+
 export default function BlogDetailPage() {
     const router = useRouter();
-    const { id } = router.query;  // URL에서 블로그 ID 가져오기
+    const { id, groupId } = router.query;  // URL에서 블로그 ID 및 그룹 ID 가져오기
     const [blog, setBlog] = useState(null);  // 블로그 상태
 
     useEffect(() => {
         if (id) {
-            // 블로그 상세 정보를 가져오는 함수
             const fetchBlogData = async () => {
                 try {
                     const res = await fetch(`/api/blogs/${id}`, {
@@ -41,7 +60,7 @@ export default function BlogDetailPage() {
 
                     if (res.ok) {
                         const data = await res.json();
-                        setBlog(data);  // 블로그 상태 업데이트
+                        setBlog(data);
                     } else {
                         console.error('Failed to fetch blog data');
                     }
@@ -54,7 +73,30 @@ export default function BlogDetailPage() {
         }
     }, [id]);
 
-    if (!blog) return <p>Loading...</p>;  // 로딩 중 표시
+    // 블로그 삭제 함수
+    const handleDelete = async () => {
+        const confirmDelete = confirm('정말로 이 블로그를 삭제하시겠습니까?');
+
+        if (confirmDelete) {
+            try {
+                const res = await fetch(`/api/blogs/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                });
+
+                if (res.ok) {
+                    alert('블로그가 삭제되었습니다.');
+                    router.push(`/groups/${groupId}`);  // 블로그 목록으로 리다이렉트
+                } else {
+                    console.error('Failed to delete blog');
+                }
+            } catch (error) {
+                console.error('Error deleting blog:', error);
+            }
+        }
+    };
+
+    if (!blog) return <p>Loading...</p>;
 
     return (
         <>
@@ -63,6 +105,7 @@ export default function BlogDetailPage() {
                 <Container>
                     <BlogTitle>{blog.title}</BlogTitle>
                     <BlogContent>{blog.content}</BlogContent>
+                    <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
                 </Container>
             </Wrapper>
         </>

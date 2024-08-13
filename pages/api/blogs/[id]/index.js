@@ -17,6 +17,19 @@ export default async function handler(req, res) {
             console.error('Error fetching blog:', error);
             res.status(500).json({ message: 'Failed to fetch blog' });
         }
+    } else if (req.method === 'DELETE') {
+        try {
+            const result = await db.run('DELETE FROM blogs WHERE id = ?', id);
+
+            if (result.changes === 0) {
+                return res.status(404).json({ message: 'Blog not found' });
+            }
+
+            res.status(200).json({ message: 'Blog deleted successfully' });
+        } catch (error) {
+            console.error('Error deleting blog:', error);
+            res.status(500).json({ message: 'Failed to delete blog' });
+        }
     } else {
         res.status(405).json({ message: 'Method Not Allowed' });
     }
