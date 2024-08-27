@@ -26,6 +26,23 @@ const BlogContent = styled.div`
   margin-top: 20px;
   font-size: 20px;
   line-height: 1.6;
+  
+  
+  strong {
+    font-weight: bold;
+  }
+  em {
+    font-style: italic;
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+  h2 {
+    font-size: 2em;
+  }
+  h1 {
+    font-size: 2.5em;
+  }
 `;
 
 const DeleteButton = styled.button`
@@ -104,7 +121,7 @@ export default function BlogDetailPage() {
             <Wrapper>
                 <Container>
                     <BlogTitle>{blog.title}</BlogTitle>
-                    <BlogContent>{blog.content}</BlogContent>
+                    <BlogContent dangerouslySetInnerHTML={{ __html: blog.content }} />
                     <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
                 </Container>
             </Wrapper>

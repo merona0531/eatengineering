@@ -1,34 +1,57 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import {useEffect, useState} from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import axios from 'axios';
+
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import 'react-quill/dist/quill.snow.css';
+
+// Define formats used by ReactQuill
+const formats = [
+    'font',
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'align',
+    'color',
+    'background',
+    'size',
+    'h1',
+];
 
 export default function WriteBlogPage() {
     const router = useRouter();
-    const { id } = router.query; // 그룹 ID
+    const { id } = router.query;
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [userId, setUserId] = useState(null); // 사용자의 ID를 상태로 저장
+    const [userId, setUserId] = useState(null);
 
-    // 사용자 ID를 가져오는 함수 (예: 로그인 상태 확인)
-    const fetchUserId = async () => {
-        try {
-            const res = await fetch('/api/check-auth', {
-                method: 'GET',
-                credentials: 'include',
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                setUserId(data.user?.id); // 사용자 ID 상태 업데이트
-            } else {
-                console.error('Failed to fetch user ID');
-            }
-        } catch (error) {
-            console.error('Error fetching user ID:', error);
-        }
-    };
-
-    // 컴포넌트 마운트 시 사용자 ID를 가져옴
     useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const res = await fetch('/api/check-auth', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUserId(data.user?.id);
+                } else {
+                    console.error('Failed to fetch user ID');
+                }
+            } catch (error) {
+                console.error('Error fetching user ID:', error);
+            }
+        };
+
         fetchUserId();
     }, []);
 
@@ -46,11 +69,11 @@ export default function WriteBlogPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ title, content, userId }), // userId를 포함
+                body: JSON.stringify({ title, content, userId }), // content now contains HTML
             });
 
             if (res.ok) {
-                router.push(`/groups/${id}`); // 블로그 작성 후 그룹 페이지로 돌아가기
+                router.push(`/groups/${id}`);
             } else {
                 console.error('Failed to post blog');
             }
@@ -58,6 +81,61 @@ export default function WriteBlogPage() {
             console.error('Error posting blog:', error);
         }
     };
+
+    // Custom image upload handler
+    const handleImageUpload = async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await axios.post('/api/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            if (res.data.url) {
+                return res.data.url;
+            } else {
+                console.error('Failed to upload image');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            return null;
+        }
+    };
+
+    const modules = useMemo(() => ({
+        toolbar: {
+            container: [
+                [{ size: ['small', false, 'large', 'huge'] }],
+                [{ align: [] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ list: 'ordered' }, { list: 'bullet' }],
+                ['link', 'image'],
+                [
+                    { color: [] },
+                    { background: [] },
+                ],
+            ],
+            handlers: {
+                image: function () {
+                    const input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/*');
+                    input.click();
+
+                    input.onchange = async () => {
+                        const file = input.files[0];
+                        const url = await handleImageUpload(file);
+                        if (url) {
+                            const range = this.quill.getSelection();
+                            this.quill.insertEmbed(range.index, 'image', url);
+                        }
+                    };
+                },
+            },
+        },
+    }), []);
 
     return (
         <div>
@@ -73,9 +151,11 @@ export default function WriteBlogPage() {
                 </div>
                 <div>
                     <label>내용:</label>
-                    <textarea
+                    <ReactQuill
+                        theme="snow"
+                        modules={modules}
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
+                        onChange={setContent}
                     />
                 </div>
                 <button type="submit">등록</button>

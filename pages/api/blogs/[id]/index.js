@@ -17,6 +17,20 @@ export default async function handler(req, res) {
             console.error('Error fetching blog:', error);
             res.status(500).json({ message: 'Failed to fetch blog' });
         }
+    } else if (req.method === 'POST') {
+        const { title, content, userId } = req.body;
+
+        try {
+            const result = await db.run(
+                'INSERT INTO blogs (title, content, userId, groupId) VALUES (?, ?, ?, ?)',
+                [title, content, userId, id]
+            );
+
+            res.status(201).json({ message: 'Blog created successfully', id: result.lastID });
+        } catch (error) {
+            console.error('Error creating blog:', error);
+            res.status(500).json({ message: 'Failed to create blog' });
+        }
     } else if (req.method === 'DELETE') {
         try {
             const result = await db.run('DELETE FROM blogs WHERE id = ?', id);
