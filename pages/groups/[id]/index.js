@@ -70,11 +70,29 @@ const WriteBtn=styled.button`
     color: #ffbd43;
   }
 `
+const InviteBtn=styled.button`
+  height: 60px;
+  width: 120px;
+  border-radius: 20px;
+  font-size: 23px;
+  background-color: #FFBD43;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  &:hover {
+    background-color: #ffefaf;
+    color: #ffbd43;
+  }
+`
+
 export default function GroupDetailPage() {
     const router = useRouter();
     const { id } = router.query;  // URL에서 그룹 ID 가져오기
     const [groupName, setGroupName] = useState('');  // 그룹 이름 상태
     const [blogs, setBlogs] = useState([]);  // 블로그 목록 상태
+    const [inviteeId, setInviteeId] = useState('');  // 초대할 친구의 아이디 상태
+    const [showInviteModal, setShowInviteModal] = useState(false);  // 모달 창 상태
 
     useEffect(() => {
         if (id) {
@@ -101,15 +119,39 @@ export default function GroupDetailPage() {
         }
     }, [id]);
 
-    // 글쓰기 버튼 클릭 시 블로그 작성 화면으로 이동
     const handleWriteBlog = () => {
         router.push(`/groups/${id}/write`);
     };
 
-    // 블로그 박스를 클릭할 때 블로그 상세 페이지로 이동
     const handleBlogClick = (blogId) => {
         router.push(`/blogs/${blogId}?groupId=${id}`);
     };
+
+    const handleInvite = async () => {
+        try {
+            const res = await fetch(`/api/groups/${id}/invite`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ inviteeId }),
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                console.log('Response Data:', data); // 응답 데이터 확인
+                alert('초대가 전송되었습니다.');
+                setShowInviteModal(false);
+                console.log('Invitation ID:', data.invitationId); // 응답에서 초대 ID 확인
+            } else {
+                console.error('Failed to send invitation');
+            }
+        } catch (error) {
+            console.error('Error sending invitation:', error);
+        }
+    };
+
 
     return (
         <>
@@ -123,6 +165,7 @@ export default function GroupDetailPage() {
                             </svg>
                         </Logo>
                         <WriteBtn onClick={handleWriteBlog}>글쓰기</WriteBtn>
+                        <InviteBtn onClick={() => setShowInviteModal(true)}>친구 추가</InviteBtn>
                     </Part>
                     <GroupBlogTitle><p>{groupName}</p> group's Blog</GroupBlogTitle>
                     <BlogContainer>
@@ -134,6 +177,21 @@ export default function GroupDetailPage() {
                     </BlogContainer>
                 </Container>
             </Wrapper>
+            {showInviteModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>친구 초대</h2>
+                        <input
+                            type="text"
+                            placeholder="친구 아이디 입력"
+                            value={inviteeId}
+                            onChange={(e) => setInviteeId(e.target.value)}
+                        />
+                        <button onClick={handleInvite}>초대 보내기</button>
+                        <button onClick={() => setShowInviteModal(false)}>취소</button>
+                    </div>
+                </div>
+            )}
         </>
     );
 }

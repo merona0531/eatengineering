@@ -27,7 +27,6 @@ const BlogContent = styled.div`
   font-size: 20px;
   line-height: 1.6;
   
-  
   strong {
     font-weight: bold;
   }

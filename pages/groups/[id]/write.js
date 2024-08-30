@@ -5,6 +5,9 @@ import axios from 'axios';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
+import ImageResize from 'quill-image-resize-module-react';
+import {Quill} from "react-quill";
+
 
 // Define formats used by ReactQuill
 const formats = [
@@ -133,6 +136,10 @@ export default function WriteBlogPage() {
                         }
                     };
                 },
+            },
+            imageResize: {
+                parchment: Quill.import('parchment'),
+                modules: ['Resize', 'DisplaySize', 'Toolbar'],
             },
         },
     }), []);
