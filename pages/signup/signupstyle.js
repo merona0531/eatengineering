@@ -20,10 +20,10 @@ export const SignupBox = styled.div`
   width: 320px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #FFBD43;
+  border: 1px solid #6B1300;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fdf3da;
+  background-color: #FAFAED;
 `;
 
 export const InputWrapper = styled.div`
@@ -35,32 +35,34 @@ export const Label = styled.label`
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #FFBD43;
+  color: #6B1300;
+  font-family: HancomEQN ;
 `;
 
 export const Input = styled.input`
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
-  border: 1px solid #FFBD43;
+  border: 1px solid #6B1300;
   border-radius: 5px;
 `;
 
 export const Button = styled.button`
   width: 100%;
   padding: 10px;
-  font-size: 15px;
-  background-color: #FFBD43;
+  font-size: 20px;
+  background-color: #6B1300;
   color: white;
   font-weight: bold;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+  font-family: HancomEQN ;
 
   &:hover {
-    background-color: #ffefaf;
-    color: #FFBD43;
+    background-color: #EBC8BD;
+    color: #6B1300;
   }
 `;
 

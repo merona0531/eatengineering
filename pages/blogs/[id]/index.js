@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   background-color: #fff9df;
-  height: 100vh;
+  height: auto;
 `;
 
 const Container = styled.div`
@@ -41,6 +41,9 @@ const BlogContent = styled.div`
   }
   h1 {
     font-size: 2.5em;
+  }
+  span.ql-size-huge{
+    font-size: 4em;
   }
 `;
 

@@ -13,6 +13,7 @@ export const TopBar=styled.div`
 `
 export const Wrapper = styled.div`
     display: flex;
+        width: 100%;
   justify-content: center;
   background-color: #FAFAED;
   height: 1000px;
@@ -131,7 +132,7 @@ export const Username=styled.div`
         display: flex;
         align-items: center;
   p{
-          font-family: "Lucida Handwriting";
+          font-family: HancomEQN ;
           font-style: inherit;
           font-size: 25px;
           color: #6B1300;
@@ -159,6 +160,7 @@ export const Group=styled.div`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
 `
 export const DeleteBtn=styled.button`
         display: flex;
