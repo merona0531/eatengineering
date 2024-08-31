@@ -21,8 +21,21 @@ export default async function handler(req, res) {
                 driver: sqlite3.Database,
             });
 
-            // `username`으로 `invitee_id`를 조회하여 초대 내역 조회
-            const invitations = await db.all('SELECT i.id AS invitation_id, g.name AS group_name, i.invitee_id, i.status FROM invitations i INNER JOIN groups g ON i.group_id = g.id WHERE i.invitee_id = ? AND i.status = ?', [username, 'pending']);
+            // 그룹 ID를 포함하도록 쿼리 수정
+            const invitations = await db.all(
+                `SELECT 
+                    i.id AS invitation_id, 
+                    g.id AS group_id, 
+                    g.name AS group_name, 
+                    i.invitee_id, 
+                    i.status, 
+                    u.name AS inviter_name 
+                FROM invitations i 
+                INNER JOIN groups g ON i.group_id = g.id 
+                INNER JOIN users u ON i.inviter_id = u.id 
+                WHERE i.invitee_id = ? AND i.status = ?`,
+                [username, 'pending']
+            );
 
             res.status(200).json(invitations);
         } catch (error) {

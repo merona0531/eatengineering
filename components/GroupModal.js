@@ -14,7 +14,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-    background-color: white;
+  background-color: #FAFAED;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -25,13 +25,15 @@ const Input = styled.input`
     padding: 10px;
   margin-top: 10px;
     margin-bottom: 20px;
-    border: 2px solid #FFBD43;
+    border: 2px solid #6B1300;
     border-radius: 4px;
+  background-color: #FAFAED;
+
 `;
 
 const Button = styled.button`
     padding: 10px 20px;
-    background-color: #FFBD43;
+    background-color: #6B1300;
     color: white;
     border: none;
     border-radius: 4px;

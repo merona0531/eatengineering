@@ -35,10 +35,13 @@ export const PlusGroupContainer=styled.div`
   justify-content: center;
   cursor: pointer;
         margin-left: 20px;
+        font-size: 50px;
+        color: white;
 
-  &:hover {
-    background-color: #EBC8BD;
-  }
+        &:hover {
+    background-color: #EBC8BD;   
+                color: #6B1300;
+        }
 `
 
 export const BtnWrapper=styled.div`
@@ -235,11 +238,12 @@ export const InviteContainer=styled.div`
 export const Invite=styled.div`
         display: flex;
         align-items: center;
-        width: 600px;
+        width: auto;
         margin-bottom: 20px;
         height: 40px;
         font-size: 25px;
         font-family: "Lucida Handwriting";
+        margin-top: 20px;
         justify-content: space-between;
 
 `
@@ -258,12 +262,14 @@ export const Invitation=styled.div`
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                margin-left: 20px;
         }
 `
 export const BtnWrapper2=styled.div`
         display: flex;
         width: 180px;
         justify-content: space-between;
+        margin-left: 40px;
 `
 export const AcceptBtn=styled.button`
         font-family: "Lucida Handwriting";

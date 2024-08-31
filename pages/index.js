@@ -1,32 +1,11 @@
 import { Reset } from 'styled-reset';
 import {
-    Container,
-    SubTitle,
-    Logo,
-    TopBar,
-    Wrapper,
-    BtnWrapper,
-    LoginBtn,
-    RegisterBtn,
-    VirticalLineWrapper,
-    VirticalLine,
-    LogoutBtn,
-    PlusGroupContainer,
-    Group,
-    BodyContainer,
-    DeleteBtn,
-    Username,
-    DottedLine,
-    BodyContainer2,
-    RightArrow,
-    GroupInfo,
-    BallonDog,
-    InviteContainer,
-    Invite,
-    AcceptBtn,
-    RejectBtn,
-    Invitations,
-    Invitation, BtnWrapper2
+    Container, SubTitle, Logo, TopBar,
+    Wrapper, BtnWrapper, LoginBtn, RegisterBtn,
+    VirticalLineWrapper, VirticalLine, LogoutBtn, PlusGroupContainer, Group, BodyContainer,
+    DeleteBtn, Username, DottedLine, BodyContainer2,
+    RightArrow, GroupInfo, BallonDog, InviteContainer,
+    Invite, AcceptBtn, RejectBtn, Invitation, BtnWrapper2
 } from '../styles/mainstyle';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -34,13 +13,14 @@ import GroupModal from '../components/GroupModal';
 import { TiChevronRightOutline } from 'react-icons/ti';
 import { IoClose } from "react-icons/io5";
 import { GiBalloonDog } from "react-icons/gi";
+import { IoAddOutline } from "react-icons/io5";
 import axios from 'axios';
 
 export default function HomePage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [groups, setGroups] = useState([]);
-    const [userName, setUserName] = useState(''); // 사용자 이름 상태 추가
-    const [invitations, setInvitations] = useState([]); // 그룹 초대 상태 추가
+    const [userName, setUserName] = useState('');
+    const [invitations, setInvitations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
 
@@ -55,9 +35,9 @@ export default function HomePage() {
                 if (res.ok) {
                     const userData = await res.json();
                     setIsAuthenticated(true);
-                    setUserName(userData.user?.name || ''); // 사용자 이름 상태 업데이트
-                    fetchGroups(); // 그룹명 불러오기
-                    fetchInvitations(); // 그룹 초대 내역 불러오기
+                    setUserName(userData.user?.name || '');
+                    fetchGroups();
+                    fetchInvitations();
                 } else {
                     setIsAuthenticated(false);
                 }
@@ -94,8 +74,8 @@ export default function HomePage() {
 
                 if (res.ok) {
                     const data = await res.json();
-                    console.log('Fetched invitations:', data); // 데이터 확인
-                    setInvitations(data); // 초대 상태 업데이트
+                    console.log('Fetched invitations:', data);
+                    setInvitations(data);
                 } else {
                     console.error('Failed to fetch invitations');
                 }
@@ -120,7 +100,7 @@ export default function HomePage() {
 
             if (res.ok) {
                 setIsAuthenticated(false);
-                setUserName(''); // 로그아웃 시 사용자 이름 초기화
+                setUserName('');
                 router.push('/login');
             } else {
                 console.error('Logout failed');
@@ -142,7 +122,7 @@ export default function HomePage() {
             }
 
             const userData = await userResponse.json();
-            const user_id = userData.user?.id; // 여기서 user.id를 확인
+            const user_id = userData.user?.id;
 
             if (!user_id) {
                 throw new Error('User ID not found');
@@ -154,7 +134,7 @@ export default function HomePage() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: groupName }),
-                credentials: 'include', // 쿠키를 포함시킵니다
+                credentials: 'include',
             });
 
             if (res.ok) {
@@ -194,23 +174,46 @@ export default function HomePage() {
         router.push(`/groups/${groupId}`);
     };
 
-    // 초대 수락 함수
+    // Define fetchGroups function inside the component
+    const fetchGroups = async () => {
+        try {
+            const res = await fetch('/api/groups', {
+                method: 'GET',
+                credentials: 'include',
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                setGroups(data);
+            } else {
+                console.error('Failed to fetch groups');
+            }
+        } catch (error) {
+            console.error('Error fetching groups:', error);
+        }
+    };
+
     const handleAcceptInvitation = async (invitationId) => {
         try {
             const response = await axios.patch(`/api/invitations/${invitationId}`, { action: 'accept' });
 
             if (response.status === 200) {
-                // 초대 수락 후 UI 갱신
                 alert('Invitation accepted successfully.');
 
-                // 새로 수락된 그룹 정보를 가져오거나 상태를 업데이트
+                // 서버에서 처리된 그룹 정보를 가져오거나, UI를 갱신
                 const invitation = invitations.find(invite => invite.invitation_id === invitationId);
                 if (invitation) {
-                    setGroups(prevGroups => [...prevGroups, { id: invitation.group_id, name: invitation.group_name }]);
-                }
+                    // 초대 수락 후 UI 갱신
+                    setGroups(prevGroups => [
+                        ...prevGroups,
+                        { id: invitation.group_id, name: invitation.group_name }
+                    ]);
 
-                // 초대 목록에서 수락된 초대를 제거
-                setInvitations(prevInvitations => prevInvitations.filter(invite => invite.invitation_id !== invitationId));
+                    // 초대 목록에서 수락된 초대를 제거
+                    setInvitations(prevInvitations =>
+                        prevInvitations.filter(invite => invite.invitation_id !== invitationId)
+                    );
+                }
             }
         } catch (error) {
             console.error('Failed to accept invitation:', error);
@@ -218,19 +221,21 @@ export default function HomePage() {
         }
     };
 
+
     const handleRejectInvitation = async (invitationId) => {
         try {
             const response = await axios.patch(`/api/invitations/${invitationId}`, { action: 'reject' });
 
             if (response.status === 200) {
                 alert('Invitation rejected successfully.');
-                // 추가적인 로직: 초대 거절 후 UI 갱신 등
+                setInvitations(prevInvitations => prevInvitations.filter(invite => invite.invitation_id !== invitationId));
             }
         } catch (error) {
             console.error('Failed to reject invitation:', error);
             alert('Failed to reject the invitation.');
         }
     };
+
 
     return (
         <>
@@ -267,25 +272,26 @@ export default function HomePage() {
                                     <path d="M17.15 36.45C14.7833 36.45 12.5667 36 10.5 35.1C8.43333 34.1667 6.6 32.8833 5 31.25C3.43333 29.6167 2.2 27.7333 1.3 25.6C0.433333 23.4667 1.41561e-07 21.1667 1.41561e-07 18.7C1.41561e-07 16.2667 0.433333 13.9667 1.3 11.8C2.2 9.6 3.41667 7.66667 4.95 6C6.51667 4.3 8.33333 2.98333 10.4 2.05C12.5 1.08333 14.75 0.6 17.15 0.6C20.0167 0.6 22.7 1.3 25.2 2.7C27.7333 4.06667 29.9 6.11667 31.7 8.85L27.05 11.9C25.75 9.96667 24.25 8.53333 22.55 7.6C20.85 6.66667 19.05 6.2 17.15 6.2C14.95 6.2 12.9833 6.78333 11.25 7.95C9.51667 9.08333 8.13333 10.6 7.1 12.5C6.1 14.3667 5.6 16.4333 5.6 18.7C5.6 20.3 5.9 21.8333 6.5 23.3C7.1 24.7667 7.93333 26.0833 9 27.25C10.0667 28.3833 11.2833 29.2833 12.65 29.95C14.05 30.5833 15.55 30.9 17.15 30.9C19.3833 30.9 21.2 30.6 22.6 30C24.0333 29.3667 25.25 28.2833 26.25 26.75V23.8H20.4V18.55H31.85V28.15C30.4167 31.05 28.4833 33.1667 26.05 34.5C23.65 35.8 20.6833 36.45 17.15 36.45ZM36.3887 36V11.1H41.6887V13.1C42.922 11.8 44.4053 11.1167 46.1387 11.05C47.9053 10.9833 49.922 11.3 52.1887 12L49.6387 16.6C48.3053 16.1333 47.022 16.0167 45.7887 16.25C44.5553 16.4833 43.5553 16.9333 42.7887 17.6C42.022 18.2667 41.6553 19.0333 41.6887 19.9V36H36.3887ZM65.3227 36.65C62.9227 36.65 60.806 36.1333 58.9727 35.1C57.1727 34.0333 55.756 32.5667 54.7227 30.7C53.7227 28.8 53.2227 26.6 53.2227 24.1C53.2227 21.1667 53.7393 18.7167 54.7727 16.75C55.806 14.75 57.2227 13.25 59.0227 12.25C60.856 11.25 62.956 10.75 65.3227 10.75C67.6893 10.75 69.7727 11.25 71.5727 12.25C73.406 13.25 74.8393 14.75 75.8727 16.75C76.906 18.7167 77.4227 21.1667 77.4227 24.1C77.4227 26.6 76.906 28.8 75.8727 30.7C74.8393 32.5667 73.406 34.0333 71.5727 35.1C69.7727 36.1333 67.6893 36.65 65.3227 36.65ZM65.3227 31.55C66.8227 31.55 68.0893 31.2 69.1227 30.5C70.156 29.8 70.9393 28.8833 71.4727 27.75C72.0393 26.6167 72.3227 25.4 72.3227 24.1C72.3227 21.7667 71.7227 19.8167 70.5227 18.25C69.3227 16.65 67.5893 15.85 65.3227 15.85C63.0893 15.85 61.356 16.6333 60.1227 18.2C58.9227 19.7667 58.3227 21.7333 58.3227 24.1C58.3227 25.4333 58.5893 26.6667 59.1227 27.8C59.6893 28.9333 60.4893 29.85 61.5227 30.55C62.556 31.2167 63.8227 31.55 65.3227 31.55ZM102.769 36H97.4188V33.85C96.9521 34.7167 96.1354 35.3667 94.9688 35.8C93.8021 36.2333 92.5021 36.45 91.0688 36.45C89.6688 36.4833 88.2854 36.3 86.9188 35.9C85.5854 35.5 84.4688 34.9167 83.5688 34.15C81.5021 32.2833 80.4688 29.55 80.4688 25.95V11H85.8187V25.95C85.8187 27.85 86.3688 29.2333 87.4688 30.1C88.6021 30.9667 90.0188 31.4 91.7188 31.4C92.5854 31.4 93.4521 31.2167 94.3188 30.85C95.2188 30.45 95.9521 29.85 96.5188 29.05C97.1188 28.25 97.4188 27.2167 97.4188 25.95V11H102.769V36ZM113.075 46H107.775V11H113.075V12.4C115.142 11.2333 117.192 10.7 119.225 10.8C121.292 10.9 123.175 11.5167 124.875 12.65C126.575 13.75 127.942 15.2667 128.975 17.2C130.009 19.1333 130.525 21.3667 130.525 23.9C130.525 26.2333 130.025 28.3333 129.025 30.2C128.025 32.0667 126.659 33.55 124.925 34.65C123.192 35.75 121.242 36.3167 119.075 36.35C118.275 36.35 117.275 36.25 116.075 36.05C114.875 35.8833 113.875 35.5333 113.075 35V46ZM113.075 29.9C115.142 30.9333 117.092 31.35 118.925 31.15C120.792 30.95 122.292 30.2333 123.425 29C124.559 27.7333 125.125 26.0333 125.125 23.9C125.125 22.1 124.775 20.6 124.075 19.4C123.409 18.1667 122.492 17.2667 121.325 16.7C120.159 16.1 118.859 15.8667 117.425 16C116.025 16.1333 114.575 16.65 113.075 17.55V29.9ZM134.033 32.75L137.133 29.4C139.067 30.9667 140.983 31.75 142.883 31.75C143.417 31.75 143.933 31.6833 144.433 31.55C144.933 31.4167 145.367 31.1833 145.733 30.85C146.2 30.4833 146.5 30 146.633 29.4C146.767 28.8 146.767 28.2833 146.633 27.85C146.467 27.1833 146.033 26.6667 145.333 26.3C144.633 25.9333 143.783 25.6 142.783 25.3C141.817 25 140.817 24.65 139.783 24.25C138.783 23.85 137.867 23.3167 137.033 22.65C135.667 21.4833 134.85 20.2333 134.583 18.9C134.317 17.5333 134.5 16.25 135.133 15.05C135.767 13.8167 136.733 12.8167 138.033 12.05C139.367 11.25 140.967 10.8167 142.833 10.75C144.567 10.7167 146.167 11 147.633 11.6C149.1 12.1667 150.267 12.9167 151.133 13.85L147.733 16.95C147.133 16.4167 146.4 16.0333 145.533 15.8C144.667 15.5333 143.85 15.4 143.083 15.4C142.217 15.4 141.467 15.5833 140.833 15.95C140.2 16.3167 139.867 16.9333 139.833 17.8C139.833 18.6333 140.217 19.2833 140.983 19.75C141.75 20.2167 142.717 20.6333 143.883 21C145.083 21.3333 146.283 21.7833 147.483 22.35C148.717 22.9167 149.717 23.75 150.483 24.85C151.25 25.9167 151.583 27.3 151.483 29C151.417 30.6 150.967 31.95 150.133 33.05C149.333 34.15 148.267 34.9833 146.933 35.55C145.633 36.0833 144.217 36.35 142.683 36.35C141.15 36.35 139.617 36.0667 138.083 35.5C136.583 34.9 135.233 33.9833 134.033 32.75Z" fill="#6B1300"/>
                                 </svg>
                                 <PlusGroupContainer onClick={() => setIsModalOpen(true)}>
-                                    <svg width="45" height="45" viewBox="0 0 75 75" fill="#FFBD43" xmlns="http://www.w3.org/2000/svg" >
-                                        <path d="M37.5 15.625V59.375M15.625 37.5H59.375" stroke="white" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-                                    </svg>
+                                    <IoAddOutline />
                                 </PlusGroupContainer>
                             </SubTitle>
                             <BodyContainer>
-                                {Array.isArray(groups) && groups.map((group) => (
-                                    <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
-                                        <DeleteBtn onClick={(e) => {
-                                            e.stopPropagation(); // Prevent triggering the group click event
-                                            handleDeleteGroup(group.id);
-                                        }}>
-                                            <IoClose />
-                                        </DeleteBtn>
-                                        <GroupInfo>
-                                            <p>{group.name}</p>
-                                        </GroupInfo>
-                                    </Group>
-                                ))}
+                                <BodyContainer>
+                                    {Array.isArray(groups) && groups.map((group) => (
+                                        <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
+                                            <DeleteBtn onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteGroup(group.id);
+                                            }}>
+                                                <IoClose />
+                                            </DeleteBtn>
+                                            <GroupInfo>
+                                                <p>{group.name}</p>
+                                            </GroupInfo>
+                                        </Group>
+                                    ))}
+                                </BodyContainer>
+
                                 {isModalOpen && (
                                     <GroupModal onClose={() => setIsModalOpen(false)} onSave={handleSaveGroup} />
                                 )}
@@ -302,13 +308,12 @@ export default function HomePage() {
                                             console.log('Invitation:', invite); // 초대 객체 확인
                                             return (
                                                 <Invite key={invite.invitation_id}>
-                                                    <Invitation><p>{invite.group_name}</p> group's invite</Invitation>
+                                                    <Invitation><p>{invite.inviter_name}</p> sent <p>{invite.group_name}</p> group's invite</Invitation>
                                                     <BtnWrapper2>
                                                         <AcceptBtn onClick={() => handleAcceptInvitation(invite.invitation_id)}>Accept</AcceptBtn>
                                                         <RejectBtn onClick={() => handleRejectInvitation(invite.invitation_id)}>Reject</RejectBtn>
                                                     </BtnWrapper2>
                                                 </Invite>
-
                                             );
                                         })}
                                     </InviteContainer>

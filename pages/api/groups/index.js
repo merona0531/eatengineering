@@ -17,15 +17,27 @@ export default async function handler(req, res) {
 
             // JWT 검증
             const decoded = jwt.verify(token, JWT_SECRET);
-            const userId = decoded.id;
+            const username = decoded.username;
 
             const db = await open({
                 filename: './database.sqlite',
                 driver: sqlite3.Database,
             });
 
-            // 사용자와 관련된 그룹만 반환
-            const groups = await db.all('SELECT * FROM groups WHERE user_id = ?', [userId]);
+            // 사용자 ID 가져오기
+            const user = await db.get('SELECT id FROM users WHERE username = ?', [username]);
+            if (!user) return res.status(404).json({ message: 'User not found' });
+
+            const userId = user.id;
+
+            // 사용자가 생성한 그룹과 초대를 통해 가입한 그룹 조회
+            const groups = await db.all(`
+                SELECT g.id, g.name 
+                FROM groups g
+                LEFT JOIN group_members gm ON g.id = gm.group_id AND gm.user_id = ?
+                WHERE g.user_id = ? OR gm.user_id IS NOT NULL
+            `, [userId, userId]);
+
             res.status(200).json(groups);
         } catch (error) {
             console.error('Error fetching groups:', error);

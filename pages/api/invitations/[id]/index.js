@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { open } from 'sqlite';
 import sqlite3 from 'sqlite3';
 
-const JWT_SECRET = '26fd3f027c9d9fe3dfcebab38afa893141a51a9f5e0bb46f36058f35fff32eab45da434b95c1ab7afb1d66045ecd7657f9639d24967f349715b9011878f306c3';
+const JWT_SECRET = '26fd3f027c9d9fe3dfcebab38afa893141a51a9f5e0bb46f36058f35fff32eab45da434b95c1ab7afb1d66045ecd7657f9639d24967f349715b9011878f306c3'; // 여기에 실제 JWT 비밀 키를 넣으세요.
 
 export default async function handler(req, res) {
     if (req.method === 'PATCH') {
@@ -26,8 +26,14 @@ export default async function handler(req, res) {
             if (action === 'accept') {
                 await db.run('UPDATE invitations SET status = ? WHERE id = ?', ['accepted', invitationId]);
 
+                // username을 user_id로 변환
+                const user = await db.get('SELECT id FROM users WHERE username = ?', [username]);
+                if (!user) return res.status(404).json({ message: 'User not found' });
+
+                const userId = user.id;
+
                 // 그룹에 사용자 추가
-                await db.run('INSERT INTO group_members (group_id, user_id) VALUES (?, ?)', [invitation.group_id, username]);
+                await db.run('INSERT INTO group_members (group_id, user_id) VALUES (?, ?)', [invitation.group_id, userId]);
 
                 res.status(200).json({ message: 'Invitation accepted' });
 
