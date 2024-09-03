@@ -10,6 +10,7 @@ import ImageResize from 'quill-image-resize-module-react';
 import { Quill } from 'react-quill';
 import styled from "styled-components";
 import {Logo} from "../../../styles/mainstyle";
+import MapComponent from "../../../components/MapComponent"
 
 // Register image resize module with Quill
 Quill.register('modules/imageResize', ImageResize);
@@ -27,6 +28,7 @@ const Container=styled.div`
   justify-content: center;
   background-color: #FAFAED;
   height: auto;
+  min-height: 100vh;
 `
 const TitleWrapper=styled.div`
     display: flex;
@@ -209,6 +211,7 @@ export default function WriteBlogPage() {
                             onChange={setContent}
                         />
                     </BodyWrapper>
+                    <MapComponent/>
                     <PublishBtn type="submit">PUBLISH</PublishBtn>
                 </form>
             </Container>

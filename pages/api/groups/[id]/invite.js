@@ -7,9 +7,11 @@ const JWT_SECRET = '26fd3f027c9d9fe3dfcebab38afa893141a51a9f5e0bb46f36058f35fff3
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         try {
+            // 쿠키에서 JWT 토큰 가져오기
             const token = req.cookies.token;
             if (!token) return res.status(401).json({ message: 'Not authenticated' });
 
+            // JWT 검증
             const decoded = jwt.verify(token, JWT_SECRET);
             const inviterId = decoded.id;
             const { inviteeId } = req.body;
@@ -18,6 +20,16 @@ export default async function handler(req, res) {
             if (!inviteeId || !groupId) return res.status(400).json({ message: 'Missing required data' });
 
             const db = await open({ filename: './database.sqlite', driver: sqlite3.Database });
+
+            // 초대 대상이 이미 그룹의 멤버인지 확인
+            const isMember = await db.get(`
+                SELECT 1 FROM group_members 
+                WHERE group_id = ? AND user_id = ?
+            `, [groupId, inviteeId]);
+
+            if (isMember) {
+                return res.status(400).json({ message: 'User is already a member of this group' });
+            }
 
             // 초대 추가
             const result = await db.run(

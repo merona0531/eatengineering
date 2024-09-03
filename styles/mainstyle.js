@@ -51,6 +51,12 @@ export const BtnWrapper=styled.div`
   align-items: center;
   justify-content: flex-end;
 `
+export const BtnWrapper3=styled.div`
+        width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`
 export const Logo=styled.div`
     height: 160px;
   display: flex;
@@ -154,16 +160,16 @@ export const BodyContainer2=styled.div`
 
 `
 export const Group=styled.div`
-  margin-top: 20px;
   width: 400px;
   height: 400px;
   background-color: #6B1300;
+        margin: 30px 10px 0 10px;
   border-radius: 5px;
-  margin-left: 20px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+        object-fit: cover;
 `
 export const DeleteBtn=styled.button`
         display: flex;
@@ -176,11 +182,25 @@ export const DeleteBtn=styled.button`
         width: 45px;
         font-size: 40px;
         cursor: pointer;
-        margin-left: 355px;
+        margin-left: 310px;
         color:#EBC8BD ;
         &:hover {
                 color: #FAFAED;
         }
+`
+export const SettingBtn=styled.button`
+        background-color: transparent;
+        border: none;
+        color: #EBC8BD;
+        height: 40px;
+        width: 40px;
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+  justify-content: center;
+        object-fit: cover;
+        
 `
 
 export const DottedLine = styled.div`
@@ -209,13 +229,14 @@ export const RightArrow=styled.button`
         display: flex;
         align-items: center;
         justify-content: center;
-        top: 50%;
-        left: 0;
         cursor: pointer;
         user-select: none;
         background: unset;
         border: unset;
-        margin-left: 5px;
+        position: absolute;
+        right: 0;
+        left: 1350px;
+        bottom: 145px;
 `
 export const GroupInfo=styled.div`
         width: 400px;
@@ -227,6 +248,12 @@ export const GroupInfo=styled.div`
                 margin-left: 10px;
                 margin-top: 15px;
                 font-size: 20px;
+        }
+
+        img {
+                max-width: 100px;
+                max-height: 100px;
+                display: block;
         }
 `
 export const InviteContainer=styled.div`
@@ -294,3 +321,29 @@ export const RejectBtn=styled.button`
         border: 2px solid #6B1300; /* 기본 테두리 */
         cursor: pointer;
 `
+export const SliderContainer = styled.div`
+        display: flex;
+`;
+
+export const Slider = styled.div`
+    display: flex;
+        justify-content: center;
+`;
+
+
+export const LeftArrow = styled.button`
+        color: #6B1300;
+        font-size: 5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        background: unset;
+        border: unset;
+        position: absolute;
+      left: 0;
+        right: 1350px;
+        bottom: 145px;
+`;
+

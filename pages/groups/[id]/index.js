@@ -10,7 +10,8 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   background-color: #FAFAED;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
 `;
 const Container=styled.div`
   width: 95%;
@@ -46,22 +47,25 @@ const GroupBlogTitle=styled.div`
     margin-right: 20px;
   }
 `
-const BlogContainer=styled.ul`
-    display: flex;
+const BlogContainer = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(3, 430px); /* 각 열의 너비를 400px로 고정 */
   margin-top: 40px;
-  justify-content: center;
-`
-const BlogBox=styled.li`
+  justify-content: center; /* 중앙 정렬 */
+  gap: 30px 0;
+`;
+
+const BlogBox = styled.li`
   list-style-type: none;
   width: 400px;
   height: 400px;
   background-color: #EBC8BD;
-  margin-right: 30px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-`
+  cursor: pointer;
+`;
+
 const BlogTitle=styled.div`
-  background-color: #0070f3;
   height: 60px;
   display: flex;
   justify-content: center;

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { Reset } from 'styled-reset';
 import {
     Container, SubTitle, Logo, TopBar,
@@ -5,16 +6,16 @@ import {
     VirticalLineWrapper, VirticalLine, LogoutBtn, PlusGroupContainer, Group, BodyContainer,
     DeleteBtn, Username, DottedLine, BodyContainer2,
     RightArrow, GroupInfo, BallonDog, InviteContainer,
-    Invite, AcceptBtn, RejectBtn, Invitation, BtnWrapper2
+    Invite, AcceptBtn, RejectBtn, Invitation, BtnWrapper2, SliderContainer, Slider, LeftArrow, SettingBtn, BtnWrapper3
 } from '../styles/mainstyle';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
 import GroupModal from '../components/GroupModal';
-import { TiChevronRightOutline } from 'react-icons/ti';
+import { TiChevronRightOutline, TiChevronLeftOutline } from 'react-icons/ti';
 import { IoClose } from "react-icons/io5";
 import { GiBalloonDog } from "react-icons/gi";
 import { IoAddOutline } from "react-icons/io5";
+import { TbPhoto } from "react-icons/tb";
 import axios from 'axios';
+import {useRouter} from "next/router";
 
 export default function HomePage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,6 +23,8 @@ export default function HomePage() {
     const [userName, setUserName] = useState('');
     const [invitations, setInvitations] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 상태
+    const itemsPerPage = 3; // 한 페이지에 보이는 그룹 개수
     const router = useRouter();
 
     useEffect(() => {
@@ -174,25 +177,6 @@ export default function HomePage() {
         router.push(`/groups/${groupId}`);
     };
 
-    // Define fetchGroups function inside the component
-    const fetchGroups = async () => {
-        try {
-            const res = await fetch('/api/groups', {
-                method: 'GET',
-                credentials: 'include',
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                setGroups(data);
-            } else {
-                console.error('Failed to fetch groups');
-            }
-        } catch (error) {
-            console.error('Error fetching groups:', error);
-        }
-    };
-
     const handleAcceptInvitation = async (invitationId) => {
         try {
             const response = await axios.patch(`/api/invitations/${invitationId}`, { action: 'accept' });
@@ -221,7 +205,6 @@ export default function HomePage() {
         }
     };
 
-
     const handleRejectInvitation = async (invitationId) => {
         try {
             const response = await axios.patch(`/api/invitations/${invitationId}`, { action: 'reject' });
@@ -236,6 +219,15 @@ export default function HomePage() {
         }
     };
 
+    const handlePrevSlide = () => {
+        setCurrentIndex(prevIndex => Math.max(prevIndex - itemsPerPage, 0));
+    };
+
+    const handleNextSlide = () => {
+        setCurrentIndex(prevIndex => Math.min(prevIndex + itemsPerPage, groups.length - itemsPerPage));
+    };
+
+    const visibleGroups = groups.slice(currentIndex, currentIndex + itemsPerPage);
 
     return (
         <>
@@ -276,28 +268,41 @@ export default function HomePage() {
                                 </PlusGroupContainer>
                             </SubTitle>
                             <BodyContainer>
-                                <BodyContainer>
-                                    {Array.isArray(groups) && groups.map((group) => (
-                                        <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
-                                            <DeleteBtn onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDeleteGroup(group.id);
-                                            }}>
-                                                <IoClose />
-                                            </DeleteBtn>
-                                            <GroupInfo>
-                                                <p>{group.name}</p>
-                                            </GroupInfo>
-                                        </Group>
-                                    ))}
-                                </BodyContainer>
-
+                                <SliderContainer>
+                                    {currentIndex > 0 && (
+                                        <LeftArrow onClick={handlePrevSlide}>
+                                            <TiChevronLeftOutline />
+                                        </LeftArrow>
+                                    )}
+                                    <Slider>
+                                        {Array.isArray(visibleGroups) && visibleGroups.map((group) => (
+                                            <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
+                                                <BtnWrapper3>
+                                                    <SettingBtn onClick={(e) => e.stopPropagation()}>
+                                                        <TbPhoto  />
+                                                    </SettingBtn>
+                                                    <DeleteBtn onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDeleteGroup(group.id);
+                                                    }}>
+                                                        <IoClose />
+                                                    </DeleteBtn>
+                                                </BtnWrapper3>
+                                                <GroupInfo>
+                                                    <p>{group.name}</p>
+                                                </GroupInfo>
+                                            </Group>
+                                        ))}
+                                    </Slider>
+                                    {currentIndex + itemsPerPage < groups.length && (
+                                        <RightArrow onClick={handleNextSlide}>
+                                            <TiChevronRightOutline />
+                                        </RightArrow>
+                                    )}
+                                </SliderContainer>
                                 {isModalOpen && (
                                     <GroupModal onClose={() => setIsModalOpen(false)} onSave={handleSaveGroup} />
                                 )}
-                                <RightArrow>
-                                    <TiChevronRightOutline />
-                                </RightArrow>
                             </BodyContainer>
                             <BodyContainer2>
                                 <DottedLine thickness="4px" color="#6B1300" />
