@@ -10,8 +10,8 @@ export default function BasicMap() {
     const [map, setMap] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [places, setPlaces] = useState([]);
+    const [selectedPlace, setSelectedPlace] = useState(null); // 선택된 장소 상태 추가
 
-    // Function to perform search and update markers and place list
     const performSearch = (term) => {
         if (!map || !term) return;
 
@@ -56,37 +56,37 @@ export default function BasicMap() {
         });
     };
 
-    // Handler for the search button click
-    const handleSearchClick = () => {
+    const handleSearchClick = (e) => {
+        e.preventDefault();
         performSearch(searchTerm);
     };
 
-    // Handler for input change
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    // Trigger search when map is set
     useEffect(() => {
         if (map) {
             performSearch(searchTerm);
         }
     }, [map]);
 
-    // Handle click on place from list
     const handlePlaceClick = (place) => {
         setInfo(place);
 
         if (map) {
-            // Center the map on the selected place
             map.setCenter(new kakao.maps.LatLng(place.position.lat, place.position.lng));
-            map.setLevel(5); // Optionally adjust the zoom level to fit the marker
+            map.setLevel(5);
         }
+    };
+
+    const handleSelectPlace = (place, e) => {
+        setSelectedPlace(place); // 선택된 장소 설정
     };
 
     return (
         <div>
-            <div style={{ marginBottom: "10px" }}>
+            <div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
                 <input
                     type="text"
                     value={searchTerm}
@@ -104,6 +104,11 @@ export default function BasicMap() {
                 >
                     Search
                 </button>
+                {selectedPlace && (
+                    <div style={{ marginLeft: "20px", fontWeight: "bold" }}>
+                        선택된 장소: {selectedPlace.name}
+                    </div>
+                )}
             </div>
             <Map
                 center={{
@@ -133,17 +138,33 @@ export default function BasicMap() {
                 {places.map((place) => (
                     <li
                         key={place.id}
-                        onClick={() => handlePlaceClick(place)}
                         style={{
                             cursor: "pointer",
                             padding: "5px",
                             borderBottom: "1px solid #ddd",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
                         }}
                     >
-                        <h5>{place.name}</h5>
-                        <span>{place.address}</span>
-                        <br />
-                        <span>{place.phone}</span>
+                        <div onClick={() => handlePlaceClick(place)}>
+                            <h5>{place.name}</h5>
+                            <span>{place.address}</span>
+                            <br />
+                        </div>
+                        <button
+                            onClick={(e) => handleSelectPlace(place, e)} // 이벤트 객체 전달
+                            style={{
+                                padding: "5px 10px",
+                                cursor: "pointer",
+                                backgroundColor: "#6B1300",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            선택하기
+                        </button>
                     </li>
                 ))}
             </ul>

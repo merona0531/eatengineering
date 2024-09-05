@@ -8,6 +8,8 @@ const Wrapper = styled.div`
   justify-content: center;
   background-color: #fff9df;
   height: auto;
+  min-height: 100vh;
+
 `;
 
 const Container = styled.div`
