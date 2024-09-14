@@ -2,7 +2,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import useKakaoLoader from "./useKakaoLoader";
 import { useEffect, useState } from "react";
 
-export default function BasicMap() {
+export default function BasicMap({ onPlaceSelect }) {  // onPlaceSelect 콜백 받기
     useKakaoLoader();
 
     const [info, setInfo] = useState(null);
@@ -83,8 +83,8 @@ export default function BasicMap() {
     const handleSelectPlace = (place, e) => {
         e.stopPropagation(); // 이벤트 전파 방지
         setSelectedPlace(place); // 선택된 장소 설정
+        onPlaceSelect(place); // 선택된 장소 부모 컴포넌트에 전달
     };
-
 
     return (
         <div>
@@ -155,6 +155,7 @@ export default function BasicMap() {
                             <br />
                         </div>
                         <button
+                            type="button"
                             onClick={(e) => handleSelectPlace(place, e)}
                             style={{
                                 padding: "5px 10px",

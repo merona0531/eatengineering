@@ -184,7 +184,7 @@ export const DeleteBtn=styled.button`
         width: 45px;
         font-size: 40px;
         cursor: pointer;
-        margin-left: 310px;
+        margin-left: 315px;
         color:#EBC8BD ;
         &:hover {
                 color: #FAFAED;
@@ -202,6 +202,9 @@ export const SettingBtn=styled.label`
         cursor: pointer;
   justify-content: center;
         object-fit: cover;
+        &:hover {
+                color: #FAFAED;
+        }
         
 `
 
@@ -242,15 +245,19 @@ export const RightArrow=styled.button`
 `
 export const GroupInfo=styled.div`
         width: 400px;
-        height: 100px;
+        height: 70px;
         border-radius: 0 0 5px 5px;
         background-color: rgba(235, 200, 189, 0.8); /* 투명도 0.8 적용 */
         z-index: 2;
+        font-family: HancomEQN ;
+        font-weight: bolder;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         p {
-                margin-left: 10px;
-                margin-top: 15px;
-                font-size: 20px;
+                margin: 15px;
+                font-size: 25px;
         }
 
         img {

@@ -20,7 +20,7 @@ import { TbPhoto } from "react-icons/tb";
 import axios from 'axios';
 import Image from 'next/image';
 import {useRouter} from "next/router";
-import GImg from './Img/1726234254785.jpg'
+import GImg from './Img/img.png'
 
 export default function HomePage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -315,7 +315,7 @@ export default function HomePage() {
                                         {Array.isArray(visibleGroups) && visibleGroups.map((group) => (
                                             <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
                                                 <Image
-                                                    src={group.image||GImg}
+                                                    src={group.image || GImg}
                                                     alt={group.user_id}
                                                     width={400}
                                                     height={400}
