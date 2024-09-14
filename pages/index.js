@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Reset } from 'styled-reset';
 import {
-    Container, SubTitle, Logo, TopBar,
-    Wrapper, BtnWrapper, LoginBtn, RegisterBtn,
-    VirticalLineWrapper, VirticalLine, LogoutBtn, PlusGroupContainer, Group, BodyContainer,
-    DeleteBtn, Username, DottedLine, BodyContainer2,
-    RightArrow, GroupInfo, BallonDog, InviteContainer,
-    Invite, AcceptBtn, RejectBtn, Invitation, BtnWrapper2, SliderContainer, Slider, LeftArrow, SettingBtn, BtnWrapper3
+    Container, SubTitle, Logo, TopBar, Wrapper,
+    BtnWrapper, LoginBtn, RegisterBtn,
+    VirticalLineWrapper, VirticalLine, LogoutBtn, PlusGroupContainer,
+    Group, BodyContainer, DeleteBtn, Username,
+    DottedLine, BodyContainer2, RightArrow, GroupInfo,
+    BallonDog, InviteContainer, Invite,
+    AcceptBtn, RejectBtn, Invitation, BtnWrapper2,
+    SliderContainer, Slider, LeftArrow, SettingBtn,
+    BtnWrapper3,
 } from '../styles/mainstyle';
 import GroupModal from '../components/GroupModal';
 import { TiChevronRightOutline, TiChevronLeftOutline } from 'react-icons/ti';
@@ -15,7 +18,9 @@ import { GiBalloonDog } from "react-icons/gi";
 import { IoAddOutline } from "react-icons/io5";
 import { TbPhoto } from "react-icons/tb";
 import axios from 'axios';
+import Image from 'next/image';
 import {useRouter} from "next/router";
+import GImg from './Img/1726234254785.jpg'
 
 export default function HomePage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -59,6 +64,7 @@ export default function HomePage() {
 
                 if (res.ok) {
                     const data = await res.json();
+                    console.log('Fetched groups data:', data);  // 데이터 확인
                     setGroups(data);
                 } else {
                     console.error('Failed to fetch groups');
@@ -229,6 +235,37 @@ export default function HomePage() {
 
     const visibleGroups = groups.slice(currentIndex, currentIndex + itemsPerPage);
 
+    const handleImageUpload = async (event, groupId) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch(`/api/groups/${groupId}`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Uploaded image URL:', data.url); // 서버에서 반환된 이미지 URL을 콘솔에 출력
+                // 그룹의 이미지 URL을 상태에서 업데이트합니다.
+                setGroups(groups.map(group =>
+                    group.id === groupId ? { ...group, image: data.url } : group
+                ));
+            } else {
+                console.error('이미지 업로드 실패');
+            }
+        } catch (error) {
+            console.error('이미지 업로드 오류:', error);
+        }
+    };
+
+
+
     return (
         <>
             <Reset />
@@ -277,9 +314,26 @@ export default function HomePage() {
                                     <Slider>
                                         {Array.isArray(visibleGroups) && visibleGroups.map((group) => (
                                             <Group key={group.id} onClick={() => handleGroupClick(group.id)}>
+                                                <Image
+                                                    src={group.image||GImg}
+                                                    alt={group.user_id}
+                                                    width={400}
+                                                    height={400}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        zIndex: 1,
+                                                        objectFit: 'cover' // object-fit: cover 추가
+                                                    }}
+                                                />
                                                 <BtnWrapper3>
                                                     <SettingBtn onClick={(e) => e.stopPropagation()}>
-                                                        <TbPhoto  />
+                                                        <input
+                                                            type="file"
+                                                            accept="image/*"
+                                                            style={{ display: 'none' }}
+                                                            onChange={(e) => handleImageUpload(e, group.id)}
+                                                        />
+                                                        <TbPhoto />
                                                     </SettingBtn>
                                                     <DeleteBtn onClick={(e) => {
                                                         e.stopPropagation();

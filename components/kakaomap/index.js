@@ -81,8 +81,10 @@ export default function BasicMap() {
     };
 
     const handleSelectPlace = (place, e) => {
+        e.stopPropagation(); // 이벤트 전파 방지
         setSelectedPlace(place); // 선택된 장소 설정
     };
+
 
     return (
         <div>
@@ -153,7 +155,7 @@ export default function BasicMap() {
                             <br />
                         </div>
                         <button
-                            onClick={(e) => handleSelectPlace(place, e)} // 이벤트 객체 전달
+                            onClick={(e) => handleSelectPlace(place, e)}
                             style={{
                                 padding: "5px 10px",
                                 cursor: "pointer",

@@ -56,6 +56,8 @@ export const BtnWrapper3=styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+        z-index: 2;
+
 `
 export const Logo=styled.div`
     height: 160px;
@@ -188,12 +190,12 @@ export const DeleteBtn=styled.button`
                 color: #FAFAED;
         }
 `
-export const SettingBtn=styled.button`
+export const SettingBtn=styled.label`
         background-color: transparent;
         border: none;
         color: #EBC8BD;
-        height: 40px;
-        width: 40px;
+        height: 30px;
+        width: 30px;
         font-size: 40px;
         display: flex;
         align-items: center;
@@ -242,7 +244,8 @@ export const GroupInfo=styled.div`
         width: 400px;
         height: 100px;
         border-radius: 0 0 5px 5px;
-        background-color: #EBC8BD;
+        background-color: rgba(235, 200, 189, 0.8); /* 투명도 0.8 적용 */
+        z-index: 2;
 
         p {
                 margin-left: 10px;
@@ -347,3 +350,10 @@ export const LeftArrow = styled.button`
         bottom: 145px;
 `;
 
+export const GroupImg=styled.img`
+        position: absolute;
+        z-index: 1;
+  width: 400px;
+        height: 400px;
+        object-fit: cover;
+`

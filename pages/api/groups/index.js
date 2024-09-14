@@ -30,9 +30,9 @@ export default async function handler(req, res) {
 
             const userId = user.id;
 
-            // 사용자가 생성한 그룹과 초대를 통해 가입한 그룹 조회
+            // 사용자가 생성한 그룹과 초대를 통해 가입한 그룹 조회 (이미지 포함)
             const groups = await db.all(`
-                SELECT g.id, g.name 
+                SELECT g.id, g.name, g.image
                 FROM groups g
                 LEFT JOIN group_members gm ON g.id = gm.group_id AND gm.user_id = ?
                 WHERE g.user_id = ? OR gm.user_id IS NOT NULL
@@ -55,7 +55,7 @@ export default async function handler(req, res) {
             // JWT 검증
             const decoded = jwt.verify(token, JWT_SECRET);
             const userId = decoded.id;
-            const { name } = req.body;
+            const { name, image } = req.body; // 이미지 URL 추가
 
             if (!name || !userId) {
                 return res.status(400).json({ message: 'Group name and user ID are required' });
@@ -66,10 +66,10 @@ export default async function handler(req, res) {
                 driver: sqlite3.Database,
             });
 
-            // 그룹 생성
-            const result = await db.run('INSERT INTO groups (name, user_id) VALUES (?, ?)', [name, userId]);
+            // 그룹 생성 (이미지 URL 포함)
+            const result = await db.run('INSERT INTO groups (name, user_id, image) VALUES (?, ?, ?)', [name, userId, image]);
 
-            const newGroup = { id: result.lastID, name, user_id: userId };
+            const newGroup = { id: result.lastID, name, user_id: userId, image }; // 이미지 URL 포함
             res.status(201).json(newGroup);
         } catch (error) {
             console.error('Error creating group:', error);
