@@ -322,7 +322,8 @@ export default function HomePage() {
                                                     style={{
                                                         position: 'absolute',
                                                         zIndex: 1,
-                                                        objectFit: 'cover' // object-fit: cover 추가
+                                                        objectFit: 'cover',
+                                                        borderRadius: '5px'
                                                     }}
                                                 />
                                                 <BtnWrapper3>
