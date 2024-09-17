@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
 export const TopBar=styled.div`
-  width: 100%;
-  height: 250px;
+  width: 1500px;
+  height: 200px;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 65px;
-  color: #6B1300;
   font-weight: 550;
 `
 export const Wrapper = styled.div`
@@ -60,7 +59,7 @@ export const BtnWrapper3=styled.div`
 
 `
 export const Logo=styled.div`
-    height: 160px;
+    height: 110px;
   display: flex;
   align-items: center;
 `
@@ -114,11 +113,11 @@ export const VirticalLine = styled.div`
 
 export const LogoutBtn = styled.div`
         background-color: #6B1300;
-        height: 47px;
-        width: 130px;
+        height: 40px;
+        width: 100px;
         font-family: "Lucida Handwriting";
         font-style: inherit;
-        font-size: 23px;
+        font-size: 18px;
         color: white;
         border: 2px solid #6B1300; /* 기본 테두리 */
         border-radius: 12px; /* 모서리 둥글게 */
@@ -128,7 +127,6 @@ export const LogoutBtn = styled.div`
         align-items: center;
         position: relative;
         overflow: hidden; /* 레이스 효과가 버튼 내부로 나가지 않게 함 */
-
         &:hover {
                 background-color: #EBC8BD;
                 color: #6B1300;
@@ -137,17 +135,19 @@ export const LogoutBtn = styled.div`
 
 
 export const Username=styled.div`
-        font-size: 25px;
+        font-size: 20px;
         color: black;
-        width: 230px;
+        width: auto;
         display: flex;
+        margin-right: 15px;
         align-items: center;
-  p{
-          font-family: HancomEQN ;
+        font-family: HancomEQN ;
+
+        p{
           font-style: inherit;
-          font-size: 25px;
+          font-size: 20px;
           color: #6B1300;
-          margin-right: 20px;
+          margin-right: 10px;
           font-weight: bold;
   }
 `
