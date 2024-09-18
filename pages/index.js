@@ -278,7 +278,7 @@ export default function HomePage() {
                                 <ButtonBase />
                             </LogoutButton>
                             <VirticalLineWrapper/>
-                            <MyButton type="button" >
+                            <MyButton type="button"  onClick={() => router.push('/my')}>
                                 <MyButtonTop>MY</MyButtonTop>
                                 <MyButtonBottom />
                                 <MyButtonBase />
