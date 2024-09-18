@@ -21,6 +21,68 @@ const formats = [
     'size', 'h1',
 ];
 
+const hueStep = 90;  // 360 / 4 layers
+const delayStep = 0.115;  // seconds
+
+const Button = styled.button`
+  background: hsl(10.7, 100%, 21%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  letter-spacing: .05em;
+  overflow: hidden;
+  padding: 1em 2em;
+  min-height: 3.3em;
+  position: relative;
+  outline: none;
+  font-weight: bold;
+  margin-top: 20px;
+  font-size: 20px;
+  font-family: HancomEQN ;
+
+  &:active,
+  &:focus {
+    outline: 3px solid hsl(calc(244 + ${hueStep}), 98%, 80%);
+  }
+  
+  span {
+    position: relative;
+    z-index: 2;
+  }
+
+  &:hover {
+    color: black;
+  }
+`;
+
+const BackgroundLayer = styled.i`
+  background: hsl(${props => props.hueBg}, 98%, 85%);
+  border-radius: 50%;
+  display: block;
+  height: 0;
+  left: 50%;
+  margin: -50% 0 0 -50%;
+  padding-top: 100%;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: scale(0);
+  transform-origin: 50% 50%;
+  transition: transform 0.175s cubic-bezier(0.5, 1, 0.89, 1);
+  z-index: 0;
+  transition-delay: ${props => props.delay}s;
+
+  ${Button}:hover &,
+  ${Button}:focus &,
+  ${Button}:active & {
+    transform: scale(1.5);
+    transition: transform 0.35s cubic-bezier(0.11, 0, 0.5, 0);
+    transition-delay: ${props => props.hoverDelay}s;
+  }
+`;
+
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -57,24 +119,6 @@ const BodyWrapper = styled.div`
   margin-top: 20px;
 `;
 
-const PublishBtn = styled.button`
-  height: 65px;
-  width: 125px;
-  border-radius: 20px;
-  font-size: 23px;
-  background-color: #6B1300;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  margin-top: 20px;
-  font-family: HancomEQN;
-
-  &:hover {
-    background-color: #EBC8BD;
-    color: #6B1300;
-  }
-`;
 
 const PlaceSelectBtn = styled.button`
   height: 40px;
@@ -230,6 +274,16 @@ export default function WriteBlogPage() {
         },
     }), []);
 
+    const layers = [0, 1, 2, 3].map(i => (
+        <BackgroundLayer
+            key={i}
+            hueBg={`calc(10.7 - ${hueStep * (i + 1)})`}
+            delay={(delayStep / 2) * (4 - i)}
+            hoverDelay={delayStep * (i + 1)}
+            aria-hidden="true"
+        />
+    ));
+
     return (
         <>
             <Reset />
@@ -277,7 +331,10 @@ export default function WriteBlogPage() {
                             onChange={setContent}
                         />
                     </BodyWrapper>
-                    <PublishBtn type="submit">PUBLISH</PublishBtn>
+                    <Button  type="submit">
+                        <span>PUBLISH</span>
+                        {layers}
+                    </Button>
                 </form>
             </Container>
         </>

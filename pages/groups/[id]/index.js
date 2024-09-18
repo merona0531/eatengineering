@@ -42,8 +42,9 @@ const GroupBlogTitle=styled.div`
   font-family: HancomEQN ;
 
   p{
-    font-size: 50px;
-    margin-right: 20px;
+    font-size: 32px;
+    margin-right: 15px;
+    color: black;
   }
 `
 const BlogContainer = styled.ul`
@@ -71,8 +72,8 @@ const BlogTitle=styled.div`
   background-color: #ebdcf5;
 `
 const WriteBtn=styled.button`
-    height: 50px;
-  width: 50px;
+    height: 45px;
+  width: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,10 +91,10 @@ const WriteBtn=styled.button`
   }
 `
 const InviteBtn=styled.button`
-  height: 60px;
-  width: 75px;
+  height: 50px;
+  width: 70px;
   border-radius: 0 20px 20px 0;
-  font-size: 35px;
+  font-size: 30px;
   background-color: #6B1300;
   color: white;
   font-weight: bold;
@@ -110,9 +111,9 @@ const InviteBtn=styled.button`
   }
 `
 const ViewMemberBtn = styled.button`
-  height: 60px;
-  font-size: 35px;
-  width: 75px;
+  height: 50px;
+  font-size: 30px;
+  width: 65px;
   border-radius: 20px 0 0 20px;
   border: none;
   background-color: #6B1300;
@@ -123,7 +124,7 @@ const ViewMemberBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 905px;
+  margin-left: 955px;
   position: relative; /* 가상 요소 위치 조정을 위해 추가 */
 
   &:hover {
@@ -143,10 +144,10 @@ const ViewMemberBtn = styled.button`
 `;
 
 const SettingBtn=styled.button`
-  height: 70px;
-  width: 70px;
+  height: 60px;
+  width: 60px;
   border-radius: 20px;
-  font-size: 50px;
+  font-size: 40px;
   background-color: transparent;
   color: black;
   cursor: pointer;
@@ -155,7 +156,7 @@ const SettingBtn=styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10px;
+  margin-left: 5px;
 
   &:hover {
     color: gray;
@@ -180,7 +181,7 @@ const Dropdown = styled.div`
     content: '';
     position: absolute;
     top:-9px;
-    left: calc(50% - 10px);
+    left: calc(50% + 15px);
     width: 0;
     height: 0;
     border-left: 10px solid transparent;

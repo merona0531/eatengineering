@@ -15,7 +15,8 @@ export const Wrapper = styled.div`
         width: 100%;
   justify-content: center;
   background-color: #FAFAED;
-  height: 1000px;
+  min-height: 72vh;  
+        height: auto;
 `;
 export const Container=styled.div`
   width: 95%;
@@ -25,8 +26,8 @@ export const SubTitle=styled.div`
 display: flex;
 `
 export const PlusGroupContainer=styled.div`
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   background-color: #EFAD87;
   border-radius: 5px;
   display: flex;
@@ -62,77 +63,11 @@ export const Logo=styled.div`
     height: 110px;
   display: flex;
   align-items: center;
-`
-export const LoginBtn=styled.button`
-    background-color: #FFBD43;
-  height: 30px;
-  width: 100px;
-  border: none;
-  border-radius: 15px 0 0 15px;
-  font-weight: bolder;
-  font-size: 14px;
-  cursor: pointer;
-  color: white;
-  &:hover {
-    background-color: #fff2d9;
-    color: #ffbd43;
-  }
-  //margin-top: 20px;
-`
-export const RegisterBtn=styled.button`
-  background-color: #FFBD43;
-  height: 30px;
-  width: 100px;
-  border: none;
-  border-radius: 0 15px 15px 0;
-  font-weight: bolder;
-  font-size: 14px;
-  cursor: pointer;
-  color: white;
-  &:hover {
-    background-color: #fff2d9;
-    color: #ffbd43;
-  }
+        margin-top: 5px;
 `
 export const VirticalLineWrapper=styled.div`
-  height: 30px;
-  width: 1px;
-  background-color: #FFBD43;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 7px;
 `
-
-export const VirticalLine = styled.div`
-  position: relative;
-    height: 18px;
-    width: 2px;
-    //margin: 0 1rem;
-    background-color: white;
-`;
-
-export const LogoutBtn = styled.div`
-        background-color: #6B1300;
-        height: 40px;
-        width: 100px;
-        font-family: "Lucida Handwriting";
-        font-style: inherit;
-        font-size: 18px;
-        color: white;
-        border: 2px solid #6B1300; /* 기본 테두리 */
-        border-radius: 12px; /* 모서리 둥글게 */
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        overflow: hidden; /* 레이스 효과가 버튼 내부로 나가지 않게 함 */
-        &:hover {
-                background-color: #EBC8BD;
-                color: #6B1300;
-        }
-`;
-
 
 export const Username=styled.div`
         font-size: 20px;
@@ -223,7 +158,7 @@ export const DottedLine = styled.div`
 `;
 export const BallonDog=styled.button`
         color: #6B1300;
-        font-size: 65px;
+        font-size: 55px;
         background-color: transparent;
         border: none;
         cursor: pointer;
@@ -364,3 +299,170 @@ export const GroupImg=styled.img`
         height: 400px;
         object-fit: cover;
 `
+
+export const LogoutButton = styled.button`
+  position: relative;
+  padding: 0 8px 12px;
+  min-width: 100px;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+export const MyButton = styled.button`
+  position: relative;
+  padding: 0 8px 12px;
+  width: 60px;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+export const ButtonTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  padding: 8px 16px;
+  font-family: HancomEQN ;
+  transform: translateY(0);
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s;
+  user-select: none;
+
+  ${LogoutButton}:active & {
+    transform: translateY(6px);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 4px;
+    width: 100%;
+    height: 100%;
+    box-sizing: content-box;
+    background-image: radial-gradient(#833022, #6B1300);
+    text-align: center;
+    color: #fff;
+    box-shadow: inset 0 0 0px 1px rgba(255, 255, 255, 0.2), 0 1px 2px 1px rgba(255, 255, 255, 0.2);
+    transition: border-radius 0.2s, padding 0.2s, width 0.2s, transform 0.2s;
+
+    ${LogoutButton}:active & {
+      border-radius: 6px;
+      padding: 0 2px;
+    }
+  }
+`;
+export const MyButtonTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  padding: 8px 16px;
+  font-family: HancomEQN ;
+  transform: translateY(0);
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 -1px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s;
+  user-select: none;
+
+  ${MyButton}:active & {
+    transform: translateY(6px);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    border-radius: 15px;
+    width: 100%;
+    height: 100%;
+    box-sizing: content-box;
+    background-image: radial-gradient(#833022, #6B1300);
+    text-align: center;
+    color: #fff;
+    box-shadow: inset 0 0 0px 1px rgba(255, 255, 255, 0.2), 0 1px 2px 1px rgba(255, 255, 255, 0.2);
+    transition: border-radius 0.2s, padding 0.2s, width 0.2s, transform 0.2s;
+
+    ${MyButton}:active & {
+      border-radius: 20px;
+      padding: 0 2px;
+    }
+  }
+`;
+
+export const ButtonBottom = styled.div`
+  position: absolute;
+  z-index: 1;
+  bottom: 4px;
+  left: 4px;
+  border-radius: 8px / 16px 16px 8px 8px;
+  padding-top: 6px;
+  width: calc(100% - 8px);
+  height: calc(100% - 10px);
+  box-sizing: content-box;
+  background-color: #701400;
+  background-image: radial-gradient(4px 8px at 4px calc(100% - 8px), rgba(255, 255, 255, 0.25), transparent),
+  radial-gradient(4px 8px at calc(100% - 4px) calc(100% - 8px), rgba(255, 255, 255, 0.25), transparent),
+  radial-gradient(16px at -4px 0, rgba(255, 255, 255, 1), transparent),
+  radial-gradient(16px at calc(100% + 4px) 0, rgba(255, 255, 255, 1), transparent);
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5), inset 0px -1px 3px 3px rgba(0, 0, 0, 0.4);
+  transition: border-radius 0.2s, padding-top 0.2s;
+
+  ${LogoutButton}:active & {
+    border-radius: 10px 10px 8px 8px / 8px;
+    padding-top: 0;
+  }
+`;
+
+export const MyButtonBottom = styled.div`
+  position: absolute;
+  z-index: 1;
+  bottom: 4px;
+  left: 4px;
+  border-radius: 30px / 30px 30px 30px 30px;
+  padding-top: 6px;
+  width: calc(100% - 8px);
+  height: calc(100% - 10px);
+  box-sizing: content-box;
+  background-color: #701400;
+  background-image: radial-gradient(4px 8px at 4px calc(100% - 8px), rgba(255, 255, 255, 0.25), transparent),
+  radial-gradient(4px 8px at calc(100% - 4px) calc(100% - 8px), rgba(255, 255, 255, 0.25), transparent),
+  radial-gradient(16px at -4px 0, rgba(255, 255, 255, 1), transparent),
+  radial-gradient(16px at calc(100% + 4px) 0, rgba(255, 255, 255, 1), transparent);
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5), inset 0px -1px 3px 3px rgba(0, 0, 0, 0.4);
+  transition: border-radius 0.2s, padding-top 0.2s;
+
+  ${MyButton}:active & {
+    border-radius: 30px 30px 30px 30px / 30px;
+    padding-top: 0;
+  }
+`;
+
+export const ButtonBase = styled.div`
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  left: 0;
+  border-radius: 12px;
+  width: 100%;
+  height: calc(100% - 4px);
+  background-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.75), inset 0 2px 2px rgba(0, 0, 0, 0.25);
+`;
+
+export const MyButtonBase = styled.div`
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  left: 0;
+  border-radius: 20px;
+  width: 100%;
+  height: calc(100% - 4px);
+  background-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.75), inset 0 2px 2px rgba(0, 0, 0, 0.25);
+`;
