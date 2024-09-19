@@ -49,7 +49,6 @@ export const BtnWrapper=styled.div`
   margin-top: 10px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
 `
 export const BtnWrapper3=styled.div`
         width: 400px;
@@ -72,11 +71,12 @@ export const VirticalLineWrapper=styled.div`
 export const Username=styled.div`
         font-size: 20px;
         color: black;
-        width: auto;
+        width: 450px;
         display: flex;
         margin-right: 15px;
         align-items: center;
         font-family: HancomEQN ;
+  margin-top: 5px;
 
         p{
           font-style: inherit;
@@ -84,6 +84,7 @@ export const Username=styled.div`
           color: #6B1300;
           margin-right: 10px;
           font-weight: bold;
+          margin-left: 20px;
   }
 `
 export const BodyContainer=styled.div`
@@ -307,6 +308,18 @@ export const LogoutButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  margin-top: 5px;
+  margin-left: 870px;
+`;
+
+export const LoginButton = styled.button`
+  position: relative;
+  padding: 0 8px 12px;
+  min-width: 100px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 5px;
 `;
 export const MyButton = styled.button`
   position: relative;
@@ -315,6 +328,7 @@ export const MyButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  margin-top: 5px;
 `;
 export const ButtonTop = styled.div`
   display: flex;

@@ -24,7 +24,7 @@ export const Logo=styled.div`
 export const MyInfoContainer=styled.div`
   width: 400px;
   height: 500px;
-  border: 1px solid #6B1300;
+  border: 2px solid #6B1300;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -33,20 +33,27 @@ export const MyInfoContainer=styled.div`
 export const ProfileImg=styled.div`
     width: 200px;
   height: 200px;
-  background-color: #6B1300;
+  background-color: white;
   border-radius: 50%;
   margin-top: 30px;
 `
-export const ProfileModifyBtn=styled.button`
+export const ProfileModifyBtn=styled.label`
   border: none;
   background-color: transparent;
   color: #7e5847;
   font-size: 17px;
   margin-top: 10px;
+  padding: 7px;
   border-radius: 20px;
   &:hover {
     background-color: #EBC8BD;
     color: #6B1300;
+  }
+  
+  input{
+    width: 100%;
+    height: 100%;
+    display: none;
   }
 `
 export const MyInfo=styled.div`
@@ -61,6 +68,6 @@ export const BallonDog=styled.button`
         border: none;
       display: flex;
       justify-content: center;
-  margin-bottom: -20px;
+  margin-bottom: -22px;
   margin-top: -10px;
 `

@@ -13,7 +13,8 @@ async function initializeDb() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       username TEXT NOT NULL UNIQUE,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      profile_image TEXT
     )
   `);
 

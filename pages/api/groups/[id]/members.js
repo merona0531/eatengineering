@@ -1,4 +1,3 @@
-
 const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
 
@@ -16,14 +15,20 @@ export default async function handler(req, res) {
         try {
             const db = await openDb();
 
-            // 그룹 멤버 조회
-            const members = await db.all(
-                `SELECT users.username 
-                 FROM group_members 
-                 JOIN users ON group_members.user_id = users.id 
-                 WHERE group_members.group_id = ?`,
-                id
-            );
+            // 그룹 생성자와 멤버 조회
+            const members = await db.all(`
+                SELECT DISTINCT users.username, users.profile_image
+                FROM group_members 
+                JOIN users ON group_members.user_id = users.id 
+                WHERE group_members.group_id = ?
+                
+                UNION
+                
+                SELECT DISTINCT users.username, users.profile_image
+                FROM groups
+                JOIN users ON groups.user_id = users.id
+                WHERE groups.id = ?
+            `, [id, id]);
 
             res.status(200).json({ members });
         } catch (error) {

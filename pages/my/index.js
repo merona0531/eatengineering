@@ -1,22 +1,20 @@
 import {
-    BallonDog,
-    Container,
-    Logo,
-    MyInfo,
-    MyInfoContainer,
-    MyName,
-    ProfileImg,
-    ProfileModifyBtn,
-    Wrapper
+    BallonDog, Container, Logo,
+    MyInfo, MyInfoContainer, MyName,
+    ProfileImg, ProfileModifyBtn, Wrapper
 } from './mystyle';
 import { Reset } from 'styled-reset';
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import {GiBalloonDog} from "react-icons/gi";
+import Image from 'next/image';
+import PImg from "../img/ProfileImg.png";
 
-export default function Index() {
+export default function My() {
     const router = useRouter();
     const [userName, setUserName] = useState('');
+    const [profileImage, setProfileImage] = useState(PImg); // 프로필 이미지 상태 추가
+    const fileInputRef = useRef(null); // input 태그에 대한 참조 추가
 
     useEffect(() => {
         const checkAuthentication = async () => {
@@ -28,7 +26,10 @@ export default function Index() {
 
                 if (res.ok) {
                     const userData = await res.json();
-                    setUserName(userData.user?.name || '올때메로나'); // 사용자 이름을 설정
+                    setUserName(userData.user?.name  || '');
+                    if (userData.user?.profile_image) {
+                        setProfileImage(userData.user.profile_image); // 프로필 이미지 설정
+                    }
                 } else {
                     console.error('Failed to fetch user data');
                 }
@@ -40,6 +41,30 @@ export default function Index() {
         checkAuthentication();
     }, []);
 
+    // 프로필 사진 변경 핸들러
+    const handleProfileImageChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/profile-upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setProfileImage(data.url); // 성공적으로 업로드된 이미지로 변경
+                } else {
+                    console.error('Failed to upload profile image');
+                }
+            } catch (error) {
+                console.error('Error uploading profile image:', error);
+            }
+        }
+    };
     return (
         <>
             <Reset/>
@@ -52,8 +77,27 @@ export default function Index() {
                     </Logo>
                     <BallonDog><GiBalloonDog /></BallonDog>
                     <MyInfoContainer>
-                        <ProfileImg></ProfileImg>
-                        <ProfileModifyBtn>프로필 사진 수정</ProfileModifyBtn>
+                        <ProfileImg>
+                            <Image
+                                src={profileImage}
+                                width={200}
+                                height={200}
+                                style={{
+                                    position: 'absolute',
+                                    zIndex: 1,
+                                    objectFit: 'cover',
+                                    borderRadius: '50%'
+                                }}
+                            />
+                        </ProfileImg>
+                        <ProfileModifyBtn>프로필 사진 수정
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                accept="image/*"
+                                onChange={handleProfileImageChange}
+                            />
+                        </ProfileModifyBtn>
                         <MyInfo>
                             <MyName>Name : {userName}</MyName>
                         </MyInfo>

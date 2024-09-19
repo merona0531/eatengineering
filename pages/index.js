@@ -1,14 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import { Reset } from 'styled-reset';
 import {
-    Container, SubTitle, Logo, TopBar, Wrapper,
-    BtnWrapper, VirticalLineWrapper, PlusGroupContainer,
-    Group, BodyContainer, DeleteBtn, Username,
-    DottedLine, BodyContainer2, RightArrow, GroupInfo,
-    BallonDog, InviteContainer, Invite,
-    AcceptBtn, RejectBtn, Invitation, BtnWrapper2,
-    SliderContainer, Slider, LeftArrow, SettingBtn,
-    BtnWrapper3, ButtonTop, ButtonBottom, ButtonBase, LogoutButton, MyButton, MyButtonTop, MyButtonBottom, MyButtonBase
+    Container,
+    SubTitle,
+    Logo,
+    TopBar,
+    Wrapper,
+    BtnWrapper,
+    VirticalLineWrapper,
+    PlusGroupContainer,
+    Group,
+    BodyContainer,
+    DeleteBtn,
+    Username,
+    DottedLine,
+    BodyContainer2,
+    RightArrow,
+    GroupInfo,
+    BallonDog,
+    InviteContainer,
+    Invite,
+    AcceptBtn,
+    RejectBtn,
+    Invitation,
+    BtnWrapper2,
+    SliderContainer,
+    Slider,
+    LeftArrow,
+    SettingBtn,
+    BtnWrapper3,
+    ButtonTop,
+    ButtonBottom,
+    ButtonBase,
+    LogoutButton,
+    MyButton,
+    MyButtonTop,
+    MyButtonBottom,
+    MyButtonBase,
+    LoginButton
 } from '../styles/mainstyle';
 import GroupModal from '../components/GroupModal';
 import { TiChevronRightOutline, TiChevronLeftOutline } from 'react-icons/ti';
@@ -20,6 +49,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import {useRouter} from "next/router";
 import GImg from './Img/img.png'
+import PImg from "./img/ProfileImg.png";
+import {displayContent} from "next/dist/client/dev/fouc";
 export default function HomePage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [groups, setGroups] = useState([]);
@@ -29,6 +60,8 @@ export default function HomePage() {
     const [currentIndex, setCurrentIndex] = useState(0); // 슬라이드 상태
     const itemsPerPage = 3; // 한 페이지에 보이는 그룹 개수
     const router = useRouter();
+    const [profileImage, setProfileImage] = useState(PImg); // 프로필 이미지 상태 추가
+
 
     useEffect(() => {
         const checkAuthentication = async () => {
@@ -42,6 +75,9 @@ export default function HomePage() {
                     const userData = await res.json();
                     setIsAuthenticated(true);
                     setUserName(userData.user?.name || '');
+                    if (userData.user?.profile_image) {
+                        setProfileImage(userData.user.profile_image); // 프로필 이미지 설정
+                    }
                     fetchGroups();
                     fetchInvitations();
                 } else {
@@ -271,7 +307,21 @@ export default function HomePage() {
                 <BtnWrapper>
                     {isAuthenticated ? (
                         <>
-                            <Username><p>Welcome</p> {userName}</Username>
+                            <Username>
+                                <p>Welcome</p>
+                                <Image
+                                    src={profileImage}
+                                    width={40}
+                                    height={40}
+                                    style={{
+                                        zIndex: 1,
+                                        objectFit: 'cover',
+                                        borderRadius: '50%',
+                                        marginRight:'10px'
+                                    }}
+                                />
+                                {userName}
+                            </Username>
                             <LogoutButton type="button" onClick={handleLogout}>
                                 <ButtonTop>Logout</ButtonTop>
                                 <ButtonBottom />
@@ -286,17 +336,19 @@ export default function HomePage() {
                         </>
                     ) : (
                         <>
-                            <LogoutButton type="button"  onClick={() => router.push('/login')}>
-                                <ButtonTop>Login</ButtonTop>
-                                <ButtonBottom />
-                                <ButtonBase />
-                            </LogoutButton>
-                            <VirticalLineWrapper/>
-                            <LogoutButton type="button"  onClick={() => router.push('/signup')}>
-                                <ButtonTop>Sign in</ButtonTop>
-                                <ButtonBottom />
-                                <ButtonBase />
-                            </LogoutButton>
+                            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                                <LoginButton type="button"  onClick={() => router.push('/login')}>
+                                    <ButtonTop>Login</ButtonTop>
+                                    <ButtonBottom />
+                                    <ButtonBase />
+                                </LoginButton>
+                                <VirticalLineWrapper/>
+                                <LoginButton type="button"  onClick={() => router.push('/signup')}>
+                                    <ButtonTop>Sign in</ButtonTop>
+                                    <ButtonBottom />
+                                    <ButtonBase />
+                                </LoginButton>
+                            </div>
                         </>
                     )}
                 </BtnWrapper>

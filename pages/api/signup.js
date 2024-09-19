@@ -1,6 +1,5 @@
 import { openDb } from '../../lib/db';
 import bcrypt from 'bcrypt';
-
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         const { name, username, password, confirmPassword } = req.body;

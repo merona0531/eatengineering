@@ -4,7 +4,9 @@ import styled, {keyframes} from "styled-components";
 import { Reset } from 'styled-reset';
 import { MdPersonAddAlt1, MdPerson,  MdSettings  } from "react-icons/md";
 import {IoAddOutline} from "react-icons/io5";
-
+import Image from "next/image";
+import PImg from '../../img/ProfileImg.png'
+import {GiBalloonDog} from "react-icons/gi";
 
 const Wrapper = styled.div`
   display: flex;
@@ -135,10 +137,10 @@ const ViewMemberBtn = styled.button`
   &::after {
     content: '';
     position: absolute;
-    top: 10px; /* 선의 위쪽 간격 조정 */
-    right: 0;  /* 오른쪽에 선이 위치하도록 설정 */
-    width: 1px; /* 선의 두께 */
-    height: 50px; /* 선의 길이 조정 */
+    top: 10px; 
+    right: 0; 
+    width: 1px;
+    height: 30px; 
     background-color: white;
   }
 `;
@@ -276,22 +278,80 @@ const MemberListModal = styled.div`
   align-items: center;
 `;
 
+const BallonDog=styled.button`
+  position: absolute;
+        color: #6B1300;
+        font-size: 50px;
+        background-color: transparent;
+        border: none;
+      display: flex;
+      justify-content: center;
+  z-index: 2;
+  top: 23.2%;
+`
+
 const ModalContent = styled.div`
   background: #FAFAED;
-  padding: 20px;
+  padding: 40px;
   border-radius: 8px;
   min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-height: 500px;
+  h2{
+    font-family: HancomEQN;
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
 `;
+const ModalPretty=styled.div`
+  height: 280px;
+    width: 85%;
+  padding: 25px;
+  border: 2px solid #6B1300;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
+`
 const CloseButton = styled.button`
+  width: 80px;
   padding: 10px 20px;
   background-color: #6B1300;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-right: 10px;
+  margin-top: 15px;
 `;
+const Members=styled.ul`
+  max-height: 200px;
+  overflow-y: auto;
+`
+const MemberItem = styled.li`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  height: 45px;
+
+  &:last-child {
+    border-bottom: none; 
+  }
+
+  p {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
+`;
+
+
 export default function GroupDetailPage() {
     const router = useRouter();
     const { id } = router.query;  // URL에서 그룹 ID 가져오기
@@ -405,13 +465,28 @@ export default function GroupDetailPage() {
                         {showMemberModal && (
                             <MemberListModal>
                                 <ModalContent>
-                                    <h2>그룹 멤버</h2>
-                                    <ul>
-                                        {members.map((member, index) => (
-                                            <li key={index}>{member.username}</li>
-                                        ))}
-                                    </ul>
-                                    <CloseButton onClick={() => setShowMemberModal(false)}>닫기</CloseButton>
+                                    <BallonDog><GiBalloonDog /></BallonDog>
+                                    <ModalPretty>
+                                        <h2>Members</h2>
+                                        <Members>
+                                            {members.map((member, index) => (
+                                                <MemberItem key={index}>
+                                                    <Image
+                                                        src={member.profile_image || PImg}  // Use PImg if profile_image is not available
+                                                        alt={`${member.username}'s profile`}
+                                                        width={40}
+                                                        height={40}
+                                                        style={{
+                                                            objectFit: 'cover',
+                                                            borderRadius: '50%'
+                                                        }}
+                                                    />
+                                                    <p>{member.username}</p>
+                                                </MemberItem>
+                                            ))}
+                                        </Members>
+                                        <CloseButton onClick={() => setShowMemberModal(false)}>닫기</CloseButton>
+                                    </ModalPretty>
                                 </ModalContent>
                             </MemberListModal>
                         )}
