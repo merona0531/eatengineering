@@ -24,7 +24,7 @@ export const Logo=styled.div`
 export const MyInfoContainer=styled.div`
   width: 400px;
   height: 500px;
-  border: 2px solid #6B1300;
+  border: 2px solid black;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@ export const MyInfo=styled.div`
 export const MyName=styled.div`
 `
 export const BallonDog=styled.button`
-        color: #6B1300;
+        color: black;
         font-size: 50px;
         background-color: transparent;
         border: none;

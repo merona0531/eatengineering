@@ -1,5 +1,24 @@
 import styled from "styled-components";
 
+export const BigContainer=styled.div`
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: black;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+  }
+`
 export const TopBar=styled.div`
   width: 1500px;
   height: 200px;
@@ -13,10 +32,10 @@ export const TopBar=styled.div`
 export const Wrapper = styled.div`
     display: flex;
         width: 100%;
+  min-height: 72vh;
+  height: auto;
   justify-content: center;
   background-color: #FAFAED;
-  min-height: 72vh;  
-        height: auto;
 `;
 export const Container=styled.div`
   width: 95%;
@@ -56,6 +75,8 @@ export const BtnWrapper3=styled.div`
   align-items: center;
   justify-content: flex-end;
         z-index: 2;
+  position: absolute;
+
 
 `
 export const Logo=styled.div`
@@ -105,7 +126,8 @@ export const Group=styled.div`
   border-radius: 5px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+  position: relative;
+  justify-content: space-between;
         box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
         object-fit: cover;
 `
@@ -158,26 +180,27 @@ export const DottedLine = styled.div`
     
 `;
 export const BallonDog=styled.button`
-        color: #6B1300;
+        color: black;
         font-size: 55px;
         background-color: transparent;
         border: none;
         cursor: pointer;
 `
 export const RightArrow=styled.button`
-        color: #6B1300;
-        font-size: 5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        user-select: none;
-        background: unset;
-        border: unset;
-        position: absolute;
-        right: 0;
-        left: 1350px;
-        bottom: 145px;
+  color: black;
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  background: unset;
+  border: unset;
+  position: absolute;
+  top: 50%;  /* 부모 컨테이너의 중앙에 위치 */
+  transform: translateY(-50%);  /* 수직 중앙 정렬 */
+  right: -90px;  /* 오른쪽에 고정 */
+  z-index: 10;} /* 슬라이
 `
 export const GroupInfo=styled.div`
         width: 400px;
@@ -190,8 +213,11 @@ export const GroupInfo=styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+  position: absolute;
+  bottom: 0px;
 
-        p {
+
+  p {
                 margin: 15px;
                 font-size: 25px;
         }
@@ -269,6 +295,8 @@ export const RejectBtn=styled.button`
 `
 export const SliderContainer = styled.div`
         display: flex;
+  position: relative;
+
 `;
 
 export const Slider = styled.div`
@@ -278,19 +306,20 @@ export const Slider = styled.div`
 
 
 export const LeftArrow = styled.button`
-        color: #6B1300;
-        font-size: 5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        user-select: none;
-        background: unset;
-        border: unset;
-        position: absolute;
-      left: 0;
-        right: 1350px;
-        bottom: 145px;
+  color: black;
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  background: unset;
+  border: unset;
+  position: absolute;
+  top: 50%;  /* 부모 컨테이너의 중앙에 위치 */
+  transform: translateY(-50%);  /* 수직 중앙 정렬 */
+  left: -90px;  /* 왼쪽에 고정 */
+  z-index: 10;  /* 슬라이더 위에 위치하게 설정 */
 `;
 
 export const GroupImg=styled.img`
@@ -346,6 +375,9 @@ export const ButtonTop = styled.div`
   user-select: none;
 
   ${LogoutButton}:active & {
+    transform: translateY(6px);
+  }
+  ${LoginButton}:active & {
     transform: translateY(6px);
   }
 
@@ -428,6 +460,10 @@ export const ButtonBottom = styled.div`
   transition: border-radius 0.2s, padding-top 0.2s;
 
   ${LogoutButton}:active & {
+    border-radius: 10px 10px 8px 8px / 8px;
+    padding-top: 0;
+  }
+  ${LoginButton}:active & {
     border-radius: 10px 10px 8px 8px / 8px;
     padding-top: 0;
   }

@@ -12,8 +12,23 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   background-color: #FAFAED;
-  height: auto;
   min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px; 
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: black; 
+    border-radius: 10px; 
+    border: 2px solid #f0f0f0
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f0f0f0; 
+  }
 `;
 const Container=styled.div`
   width: 95%;
@@ -32,7 +47,7 @@ const Logo=styled.div`
   cursor: pointer;
 `
 const GroupBlogTitle=styled.div`
-  height: 100px;
+  min-height: 100px;
   font-size: 30px;
   font-weight: bold;
   display: flex;
@@ -50,11 +65,12 @@ const GroupBlogTitle=styled.div`
   }
 `
 const BlogContainer = styled.ul`
+  height: auto;
   display: grid;
-  grid-template-columns: repeat(3, 430px); /* 각 열의 너비를 400px로 고정 */
-  margin-top: 40px;
+  grid-template-columns: repeat(3, 430px);
   justify-content: center; /* 중앙 정렬 */
   gap: 30px 0;
+  padding: 30px 0 30px 0;
 `;
 
 const BlogBox = styled.li`
@@ -331,6 +347,20 @@ const CloseButton = styled.button`
 const Members=styled.ul`
   max-height: 200px;
   overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #6B1300; /* Color of the scrollbar thumb (the draggable part) */
+    border-radius: 10px; /* Round the scrollbar edges */
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f0f0f0; /* Background color of the scrollbar track */
+  }
+  
 `
 const MemberItem = styled.li`
   display: flex;

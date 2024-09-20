@@ -13,6 +13,7 @@ import PImg from "../img/ProfileImg.png";
 export default function My() {
     const router = useRouter();
     const [userName, setUserName] = useState('');
+    const [userId, setUserId] = useState('');
     const [profileImage, setProfileImage] = useState(PImg); // 프로필 이미지 상태 추가
     const fileInputRef = useRef(null); // input 태그에 대한 참조 추가
 
@@ -27,6 +28,7 @@ export default function My() {
                 if (res.ok) {
                     const userData = await res.json();
                     setUserName(userData.user?.name  || '');
+                    setUserId(userData.user?.username  || '');
                     if (userData.user?.profile_image) {
                         setProfileImage(userData.user.profile_image); // 프로필 이미지 설정
                     }
@@ -100,6 +102,7 @@ export default function My() {
                         </ProfileModifyBtn>
                         <MyInfo>
                             <MyName>Name : {userName}</MyName>
+                            <MyName>Id : {userId}</MyName>
                         </MyInfo>
                     </MyInfoContainer>
                 </Container>
